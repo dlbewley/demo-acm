@@ -2,17 +2,19 @@
 apiVersion: hive.openshift.io/v1
 kind: MachinePool
 metadata:
-  name: demo-worker
-  namespace: 'demo'
+  name: demo-az-tofu-org-worker
+  namespace: demo-az-tofu-org
 spec:
   clusterDeploymentRef:
-    name: 'demo'
+    name: demo-az-tofu-org
   name: worker
-  platform: {}
-    # vsphere:
-    #   cpus: 4
-    #   coresPerSocket: 2
-    #   memoryMB: 16384
-    #   osDisk:
-    #     diskSizeGB: 120
-  replicas: 0
+  platform:
+    azure:
+      type: Standard_D2s_v3
+      osDisk:
+        diskSizeGB: 100
+      zones: 
+      - "1"
+      - "2"
+      - "3"
+  replicas: 3
