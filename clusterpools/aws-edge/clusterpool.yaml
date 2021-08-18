@@ -13,6 +13,8 @@ spec:
   baseDomain: aws.tofu.org
   imageSetRef:
     name: img4.8.4-x86-64-appsub
+  # do not create worker machinepool
+  skipMachinePools: true
   installConfigSecretTemplateRef:
     name: aws-install-config
   platform:
