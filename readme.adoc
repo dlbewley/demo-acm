@@ -15,9 +15,9 @@ I use `kustomize build foo | oc apply -f -`, but you may wish to use `oc apply -
 
 === Configure Credentials Secrets
 
-* Update the values found in link:clusterdeployment/secrets/[clusterdeployment/secrets/]
-* Update the values found in link:clusterdeployment/certs/[clusterdeployment/certs/]
-* Generate an htpasswd the values found in link:clusterdeployment/secrets/[clusterdeployment/secrets/]
+* Update the values found in link:kustomize/clusterdeployment/secrets/[kustomize/clusterdeployment/secrets/]
+* Update the values found in link:kustomize/clusterdeployment/certs/[kustomize/clusterdeployment/certs/]
+* Generate an htpasswd the values found in link:kustomize/clusterdeployment/secrets/[kustomize/clusterdeployment/secrets/]
 
 [source,bash]
 ----
@@ -73,3 +73,9 @@ $ ./bin/ext-kubeconfig aws-demo
 $ export KUBECONFIG=aws-demo/auth/kubeconfig
 $ oc describe console
 ----
+
+== Todo
+
+* Refactor out ./kustomize?
+* Don't create secrets for unused cloud providers
+* Less setup and more demo
