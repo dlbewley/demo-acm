@@ -1,0 +1,23 @@
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: 'demo-aws-tofu-org'
+  namespace: 'demo-aws-tofu-org'
+spec:
+  clusterName: 'demo'
+  clusterNamespace: 'demo-aws-tofu-org'
+  clusterLabels:
+    cloud: Amazon
+    vendor: OpenShift
+  applicationManager:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  certPolicyController:
+    enabled: true
+  iamPolicyController:
+    enabled: true
+  version: 2.2.0

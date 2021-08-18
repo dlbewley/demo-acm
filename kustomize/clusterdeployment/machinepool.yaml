@@ -1,0 +1,32 @@
+---
+apiVersion: hive.openshift.io/v1
+kind: MachinePool
+metadata:
+  # name must become <clusterdeployment_name>-worker
+  name: tbd
+spec:
+  clusterDeploymentRef:
+    name: tbd
+  name: worker
+  replicas: 0
+  platform: {}
+    # vsphere:
+    #   cpus: 4
+    #   coresPerSocket: 2
+    #   memoryMB: 16384
+    #   osDisk:
+    #     diskSizeGB: 120
+    # aws:
+    #   rootVolume:
+    #     iops: 2000
+    #     size: 100
+    #     type: io1
+    #   type: m5.xlarge
+    # azure:
+    #   osDisk:
+    #     diskSizeGB: 128
+    #   type: Standard_D2s_v3
+    #   zones:
+    #   - "1"
+    #   - "2"
+    #   - "3"

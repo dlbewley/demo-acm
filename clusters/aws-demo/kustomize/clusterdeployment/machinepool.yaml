@@ -1,0 +1,18 @@
+---
+apiVersion: hive.openshift.io/v1
+kind: MachinePool
+metadata:
+  name: demo-aws-tofu-org-worker
+  namespace: demo-aws-tofu-org
+spec:
+  clusterDeploymentRef:
+    name: demo-aws-tofu-org
+  name: worker
+  platform:
+    aws:
+      rootVolume:
+        iops: 2000
+        size: 100
+        type: io1
+      type: m5.xlarge
+  replicas: 3

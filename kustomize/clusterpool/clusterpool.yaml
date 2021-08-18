@@ -1,0 +1,24 @@
+apiVersion: hive.openshift.io/v1
+kind: ClusterPool
+metadata:
+  name: aws-edge
+  namespace: edge-pool
+  labels:
+    cloud: AWS
+    cluster.open-cluster-management.io/clusterset: edge
+    region: us-west-2
+    vendor: OpenShift
+spec:
+  baseDomain: aws.tofu.org
+  imageSetRef:
+    name: img4.8.5-x86-64-appsub
+  installConfigSecretTemplateRef:
+    name: aws-install-config
+  platform:
+    aws:
+      credentialsSecretRef:
+        name: aws-creds
+      region: us-west-2
+  pullSecretRef:
+    name: pull-secret
+  size: 2

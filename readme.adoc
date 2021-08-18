@@ -1,0 +1,32 @@
+= Red Hat Advanced Cluster Management for Kubernetes Demonstration
+:toc:[]
+
+About this demo
+
+.Exercises features including:
+* ClusterPools
+* ClusterSets
+
+== How To
+
+=== Configure Credentials Secrets
+
+* Update the values found in link:clusterdeployment/secrets[clusterdeployment/secrets/]
+* Update the values found in link:clusterdeployment/certs[clusterdeployment/certs/]
+* Generate an htpasswd the values found in link:clusterdeployment/secrets[clusterdeployment/secrets/]
+
+[source,bash]
+cd clusterdeployment/secrets
+../../bin/mkhtpasswd
+
+=== Deploy Clusters
+
+[source,bash]
+kustomize build clusters/aws-demo/clusterdeployment | oc apply -f
+kustomize build clusters/az-demo/clusterdeployment | oc apply -f
+
+=== Deploy ClusterSets
+
+[source,bash]
+kustomize build clusterpools/aws-edge | oc apply -f
+kustomize build clusterpools/az-edge | oc apply -f

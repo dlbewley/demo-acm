@@ -1,0 +1,33 @@
+---
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: demo-aws-tofu-org
+  namespace: demo-aws-tofu-org
+  labels:
+    cloud: 'AWS'
+    region: 'us-west-2'
+    vendor: 'OpenShift'
+    usage: development
+spec:
+  baseDomain: aws.tofu.org
+  clusterName: 'demo'
+  controlPlaneConfig:
+    servingCertificates: {}
+  installAttemptsLimit: 1
+  installed: false
+  platform:
+    aws:
+      credentialsSecretRef:
+        name: aws-creds
+      region: us-west-2
+  provisioning:
+    installConfigSecretRef:
+      name: install-config
+    sshPrivateKeySecretRef:
+      name: ssh-private-key
+    imageSetRef:
+      #quay.io/openshift-release-dev/ocp-release:4.8.5-x86_64
+      name: img4.8.5-x86-64-appsub
+  pullSecretRef:
+    name: pull-secret
