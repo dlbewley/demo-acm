@@ -1,3 +1,4 @@
+---
 apiVersion: hive.openshift.io/v1
 kind: ClusterPool
 metadata:
@@ -6,7 +7,7 @@ metadata:
   labels:
     cluster.open-cluster-management.io/clusterset: edge
     cloud: Azure
-    region: uswest2
+    region: westus2
     vendor: OpenShift
 spec:
   baseDomain: az.tofu.org
@@ -21,7 +22,7 @@ spec:
       baseDomainResourceGroupName: ocp
       credentialsSecretRef:
         name: azure-creds
-      region: uswest2
+      region: westus2
   pullSecretRef:
     name: pull-secret
   size: 2
