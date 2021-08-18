@@ -4,8 +4,8 @@ metadata:
   name: aws-edge
   namespace: edge-pool
   labels:
-    cloud: AWS
     cluster.open-cluster-management.io/clusterset: edge
+    cloud: AWS
     region: us-west-2
     vendor: OpenShift
 spec:

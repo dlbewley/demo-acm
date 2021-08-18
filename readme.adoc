@@ -7,26 +7,69 @@ About this demo
 * ClusterPools
 * ClusterSets
 
-== How To
+== Deployment
+
+.**YMMV**
+[TIP]
+I use `kustomize build foo | oc apply -f -`, but you may wish to use `oc apply -k foo`
 
 === Configure Credentials Secrets
 
-* Update the values found in link:clusterdeployment/secrets[clusterdeployment/secrets/]
-* Update the values found in link:clusterdeployment/certs[clusterdeployment/certs/]
-* Generate an htpasswd the values found in link:clusterdeployment/secrets[clusterdeployment/secrets/]
+* Update the values found in link:clusterdeployment/secrets/[clusterdeployment/secrets/]
+* Update the values found in link:clusterdeployment/certs/[clusterdeployment/certs/]
+* Generate an htpasswd the values found in link:clusterdeployment/secrets/[clusterdeployment/secrets/]
 
 [source,bash]
-cd clusterdeployment/secrets
-../../bin/mkhtpasswd
+----
+$ cd kustomize/clusterdeployment/secrets
+$ ../../../bin/mkhtpasswd
+----
 
 === Deploy Clusters
 
 [source,bash]
-kustomize build clusters/aws-demo/clusterdeployment | oc apply -f
-kustomize build clusters/az-demo/clusterdeployment | oc apply -f
+----
+$ kustomize build clusters/aws-demo/clusterdeployment | oc apply -f -
+namespace/edge-pool unchanged
+secret/aws-creds created
+secret/aws-install-config created
+secret/azure-creds created
+secret/pull-secret created
+secret/ssh-private-key created
+secret/vsphere-certs created
+secret/vsphere-creds created
+clusterpool.hive.openshift.io/aws-edge created
+
+$ kustomize build clusters/az-demo/clusterdeployment | oc apply -f -
+----
 
 === Deploy ClusterSets
 
 [source,bash]
-kustomize build clusterpools/aws-edge | oc apply -f
-kustomize build clusterpools/az-edge | oc apply -f
+----
+$ kustomize build clusterpools/aws-edge | oc apply -f -
+$ kustomize build clusterpools/az-edge | oc apply -f -
+----
+
+== Demonstration
+
+=== View ClusterPools
+
+[source,bash]
+----
+$ oc get clusterpools aws-edge -n edge-pool 
+$ oc get clusterpools az-edge -n edge-pool 
+$ oc get namespaces | grep edge 
+
+$ oc get namespaces -l hive.openshift.io/cluster-pool-name=aws-edge
+$ oc get namespaces -l hive.openshift.io/cluster-pool-name=az-edge
+----
+
+=== Access Clusters
+
+[source,bash]
+----
+$ ./bin/ext-kubeconfig aws-demo
+$ export KUBECONFIG=aws-demo/auth/kubeconfig
+$ oc describe console
+----

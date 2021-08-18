@@ -12,7 +12,7 @@ generatorOptions:
 secretGenerator:
   - name: install-config
     files:
-    - install-config.yaml
+      - install-config.yaml
 
 resources:
   - namespace.yaml
