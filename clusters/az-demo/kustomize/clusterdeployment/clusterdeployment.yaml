@@ -3,7 +3,6 @@ apiVersion: hive.openshift.io/v1
 kind: ClusterDeployment
 metadata:
   name: 'demo-az-tofu-org'
-  namespace: 'demo-az-tofu-org'
   labels:
     cloud: 'Azure'
     vendor: 'OpenShift'

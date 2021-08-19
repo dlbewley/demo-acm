@@ -3,9 +3,8 @@ apiVersion: agent.open-cluster-management.io/v1
 kind: KlusterletAddonConfig
 metadata:
   name: 'demo-az-tofu-org'
-  namespace: 'demo-az-tofu-org'
 spec:
-  clusterName: 'demo'
+  clusterName: 'demo-az-tofu-org'
   clusterNamespace: 'demo-az-tofu-org'
   clusterLabels:
     cloud: Azure

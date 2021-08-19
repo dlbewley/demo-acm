@@ -3,9 +3,8 @@ apiVersion: agent.open-cluster-management.io/v1
 kind: KlusterletAddonConfig
 metadata:
   name: 'demo-aws-tofu-org'
-  namespace: 'demo-aws-tofu-org'
 spec:
-  clusterName: 'demo'
+  clusterName: 'demo-aws-tofu-org'
   clusterNamespace: 'demo-aws-tofu-org'
   clusterLabels:
     cloud: Amazon

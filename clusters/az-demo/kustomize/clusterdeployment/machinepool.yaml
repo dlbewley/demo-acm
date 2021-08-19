@@ -3,7 +3,6 @@ apiVersion: hive.openshift.io/v1
 kind: MachinePool
 metadata:
   name: demo-az-tofu-org-worker
-  namespace: demo-az-tofu-org
 spec:
   clusterDeploymentRef:
     name: demo-az-tofu-org
