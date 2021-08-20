@@ -1,0 +1,31 @@
+apiVersion: v1
+metadata:
+  name: 'demo'
+baseDomain: lab.bewley.net
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: 1
+  platform:
+    vsphere:
+      cpus:  8
+      coresPerSocket:  2
+      memoryMB: 24552
+      osDisk:
+        diskSizeGB: 100
+compute:
+- hyperthreading: Enabled
+  name: 'worker'
+  replicas: 0
+platform:
+  vsphere:
+    apiVIP: 192.168.4.15
+    ingressVIP: 192.168.4.14
+    network: lab-192-168-4-0-b24
+    datacenter: Garden
+    cluster: Goat
+    defaultDatastore: VMData-HD
+    vCenter: vcenter.lab.bewley.net
+    password: EXAMPLE
+    username: administrator@vcenter.lab.bewley.net
+pullSecret: "" # skip, hive will inject based on it's secrets

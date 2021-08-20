@@ -1,0 +1,38 @@
+---
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: demo-lab-bewley-net
+  labels:
+    cloud: VSphere
+    region: oak
+    vendor: 'OpenShift'
+    usage: development
+spec:
+  baseDomain: lab.bewley.net
+  clusterName: 'demo'
+  controlPlaneConfig:
+    servingCertificates: {}
+  installAttemptsLimit: 1
+  installed: false
+  platform:
+    vsphere:
+      credentialsSecretRef:
+        name: vsphere-creds
+      certificatesSecretRef:
+        name: vsphere-certs
+      cluster: Goat
+      datacenter: Garden
+      defaultDatastore: VMData-HD
+      vCenter: vcenter.lab.bewley.net
+      network: lab-192-168-4-0-b24
+  provisioning:
+    installConfigSecretRef:
+      name: install-config
+    sshPrivateKeySecretRef:
+      name: ssh-private-key
+    imageSetRef:
+      #quay.io/openshift-release-dev/ocp-release:4.8.5-x86_64
+      name: img4.8.5-x86-64-appsub
+  pullSecretRef:
+    name: pull-secret
