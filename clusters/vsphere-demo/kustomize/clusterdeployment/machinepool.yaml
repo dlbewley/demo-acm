@@ -7,11 +7,11 @@ spec:
   clusterDeploymentRef:
     name: demo-lab-bewley-net
   name: worker
-    platform: {}
-    # vsphere:
-    #   cpus: 4
-    #   coresPerSocket: 2
-    #   memoryMB: 16384
-    #   osDisk:
-    #     diskSizeGB: 120
+  platform:
+      vsphere:
+        cpus: 4
+        coresPerSocket: 2
+        memoryMB: 16384
+        osDisk:
+          diskSizeGB: 100
   replicas: 0
