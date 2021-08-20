@@ -13,18 +13,6 @@ secretGenerator:
     type: kubernetes.io/dockerconfigjson
     files:
       - secrets/.dockerconfigjson
-  - name: aws-creds
-    envs:
-      - secrets/.env.aws
-  - name: azure-creds
-    files:
-      - secrets/osServicePrincipal.json
-  - name: vsphere-creds
-    envs:
-      - secrets/.env.vsphere
-  - name: vsphere-certs
-    files:
-      - certs/.cacert
 
 # resources:
 #- klusterletaddonconfig.yaml
