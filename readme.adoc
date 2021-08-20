@@ -11,39 +11,47 @@ About this demo
 
 .**YMMV**
 [TIP]
-I use `kustomize build foo | oc apply -f -`, but you may wish to use `oc apply -k foo`
+I use `kustomize build foo | oc apply -f -`, but you may wish to use `oc apply -k foo`.
 
 === Configure Credentials Secrets
 
-* Update the values found in link:kustomize/clusterdeployment/secrets/[kustomize/clusterdeployment/secrets/]
-* Update the values found in link:kustomize/clusterdeployment/certs/[kustomize/clusterdeployment/certs/]
-* Generate an htpasswd the values found in link:kustomize/clusterdeployment/secrets/[kustomize/clusterdeployment/secrets/]
+* Update the values found in example secrets
+
+[source,bash]
+$ find . -name secrets -o -name certs
+./kustomize/oauth/secrets
+./kustomize/clusterdeployment/vsphere/secrets
+./kustomize/clusterdeployment/vsphere/certs
+./kustomize/clusterdeployment/azure/secrets
+./kustomize/clusterdeployment/aws/secrets
+./kustomize/clusterdeployment/base/secrets
+./kustomize/clusterdeployment/base/certs
+
+* Generate an htpasswd from the values found in link:kustomize/oauth/secrets/[kustomize/oauth/secrets/]
 
 [source,bash]
 ----
-$ cd kustomize/clusterdeployment/secrets
+$ cd kustomize/oauth/secrets
 $ ../../../bin/mkhtpasswd
 ----
+
+* Update vCenter password in vsphere example until <https://bugzilla.redhat.com/show_bug.cgi?id=1996188> resolves
+
+[source,bash]
+$ vi clusters/vsphere-demo/kustomize/clusterdeployment/install-config.yaml
 
 === Deploy Clusters
 
 [source,bash]
 ----
-$ kustomize build clusters/aws-demo/clusterdeployment | oc apply -f -
-namespace/edge-pool unchanged
-secret/aws-creds created
-secret/aws-install-config created
-secret/azure-creds created
-secret/pull-secret created
-secret/ssh-private-key created
-secret/vsphere-certs created
-secret/vsphere-creds created
-clusterpool.hive.openshift.io/aws-edge created
+$ kustomize build clusters/aws-demo/kustomize/clusterdeployment | oc apply -f -
 
-$ kustomize build clusters/az-demo/clusterdeployment | oc apply -f -
+$ kustomize build clusters/az-demo/kustomize/clusterdeployment | oc apply -f -
+
+$ kustomize build clusters/vsphere-demo/kustomize/clusterdeployment | oc apply -f -
 ----
 
-=== Deploy ClusterSets
+=== Deploy ClusterPools
 
 [source,bash]
 ----
@@ -69,13 +77,32 @@ $ oc get namespaces -l hive.openshift.io/cluster-pool-name=az-edge
 
 [source,bash]
 ----
-$ ./bin/ext-kubeconfig aws-demo
-$ export KUBECONFIG=aws-demo/auth/kubeconfig
+$ oc get clusterdeployments -A
+NAMESPACE          NAME               PLATFORM   REGION    CLUSTERTYPE   INSTALLED   INFRAID               VERSION   POWERSTATE    AGE
+az-edge-cjl7n      az-edge-cjl7n      azure      westus2                 true        az-edge-cjl7n-hp5mw   4.8.4     Hibernating   45h
+az-edge-t67sc      az-edge-t67sc      azure      westus2                 true        az-edge-t67sc-vdxcg   4.8.4     Hibernating   45h
+demo-az-tofu-org   demo-az-tofu-org   azure      westus2                 true        demo-r4rhh            4.8.4     Hibernating   46h
+
+$ ./bin/ext-kubeconfig demo-az-tofu-org
+$ export KUBECONFIG=demo-az-tofu-org/auth/kubeconfig
 $ oc describe console
 ----
 
-== Todo
+* Configure htpasswd auth
 
+[source,bash]
+$ export KUBECONFIG=demo-az-tofu-org/auth/kubeconfig
+$ kustomize build kustomization/oauth | oc apply -f -
+
+== Status
+
+.**Todo**
 * Refactor out ./kustomize?
-* Don't create secrets for unused cloud providers
 * Less setup and more demo
+
+.**Bugs**
+* https://bugzilla.redhat.com/show_bug.cgi?id=1995380
+* https://bugzilla.redhat.com/show_bug.cgi?id=1996188
+
+.**Tips**
+* Unlike a ClusterDeployment, a ClusterPool does not directly enable the creation of a machinepool.
