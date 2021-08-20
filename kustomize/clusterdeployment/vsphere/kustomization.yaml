@@ -1,0 +1,17 @@
+# ClusterDeployment base
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+bases:
+  - ../base
+
+secretGenerator:
+  - name: vsphere-creds
+    envs:
+      - secrets/.env.vsphere
+  - name: vsphere-certs
+    files:
+      - certs/.cacert
