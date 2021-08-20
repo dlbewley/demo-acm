@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: demo-az-tofu-org
 
 bases:
-  - ../../../../kustomize/clusterdeployment
+  - ../../../../kustomize/clusterdeployment/azure
 
 generatorOptions:
   disableNameSuffixHash: true

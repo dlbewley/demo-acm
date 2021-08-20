@@ -6,7 +6,7 @@ namespace: edge-pool
 
 bases:
   # cloud provider and pull secrets
-  - ../../kustomize/clusterpool
+  - ../../kustomize/clusterdeployment/aws
 
 generatorOptions:
   disableNameSuffixHash: true
