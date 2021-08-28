@@ -94,6 +94,26 @@ $ oc describe console
 $ export KUBECONFIG=demo-az-tofu-org/auth/kubeconfig
 $ kustomize build kustomization/oauth | oc apply -f -
 
+== Cleanup
+
+=== Destroy Clusters
+
+[source,bash]
+----
+kustomize build clusters/aws-demo/kustomize/clusterdeployment | oc delete -f -
+kustomize build clusters/az-demo/kustomize/clusterdeployment | oc delete -f -
+
+kustomize build clusters/vsphere-demo/kustomize/clusterdeployment | oc apply -f -
+----
+
+=== Destroy ClusterPools
+
+[source,bash]
+----
+kustomize build clusterpools/aws-edge | oc delete -f -
+kustomize build clusterpools/az-edge | oc delete -f -
+----
+
 == Status
 
 .**Todo**
