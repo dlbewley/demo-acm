@@ -94,6 +94,29 @@ $ oc describe console
 $ export KUBECONFIG=demo-az-tofu-org/auth/kubeconfig
 $ kustomize build kustomization/oauth | oc apply -f -
 
+=== Observability
+
+.stringData for thanos config
+[TIP]
+We have to be roundabout thanks to thanos config coming from a file.
+Let me know if you have a snazzy automation for this.
+
+* Deploy obeservability
+
+[source,bash]
+kustomize build kustomize/observability | oc apply -f - 
+
+* Configure Thanos with Object Bucket credentials 
+
+[source,bash]
+----
+# update kustomize/observability/secretes/thanos-object-storage.yaml
+vi kustomize/observability/secretes/thanos-object-storage.yaml 
+oc apply -f kustomize/observability/secretes/thanos-object-storage.yaml
+----
+
+* Ensure firewall access from managed clusters to hub cluster at `observatorium-api-open-cluster-management-observability.apps.<cluster>.<domain>:443`
+
 == Status
 
 .**Todo**
