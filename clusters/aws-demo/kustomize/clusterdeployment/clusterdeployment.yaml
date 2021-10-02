@@ -26,7 +26,7 @@ spec:
     sshPrivateKeySecretRef:
       name: ssh-private-key
     imageSetRef:
-      #quay.io/openshift-release-dev/ocp-release:4.8.5-x86_64
-      name: img4.8.5-x86-64-appsub
+      #quay.io/openshift-release-dev/ocp-release:4.8.12-x86_64
+      name: img4.8.12-x86-64-appsub
   pullSecretRef:
     name: pull-secret
