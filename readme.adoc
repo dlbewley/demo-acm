@@ -4,8 +4,10 @@
 About this demo
 
 .Exercises features including:
+* ClusterDeployments
 * ClusterPools
 * ClusterSets
+* Observability
 
 == Deployment
 
@@ -26,6 +28,7 @@ $ find . -name secrets -o -name certs
 ./kustomize/clusterdeployment/aws/secrets
 ./kustomize/clusterdeployment/base/secrets
 ./kustomize/clusterdeployment/base/certs
+./kustomize/observability/secrets # defer edits
 
 * Generate an htpasswd from the values found in link:kustomize/oauth/secrets/[kustomize/oauth/secrets/]
 
@@ -44,9 +47,9 @@ $ vi clusters/vsphere-demo/kustomize/clusterdeployment/install-config.yaml
 
 [source,bash]
 ----
-$ kustomize build clusters/aws-demo/kustomize/clusterdeployment | oc apply -f -
+$ kustomize build clusters/aws-demo/kustomize/clusterdeployment     | oc apply -f -
 
-$ kustomize build clusters/az-demo/kustomize/clusterdeployment | oc apply -f -
+$ kustomize build clusters/az-demo/kustomize/clusterdeployment      | oc apply -f -
 
 $ kustomize build clusters/vsphere-demo/kustomize/clusterdeployment | oc apply -f -
 ----
@@ -56,7 +59,7 @@ $ kustomize build clusters/vsphere-demo/kustomize/clusterdeployment | oc apply -
 [source,bash]
 ----
 $ kustomize build clusterpools/aws-edge | oc apply -f -
-$ kustomize build clusterpools/az-edge | oc apply -f -
+$ kustomize build clusterpools/az-edge  | oc apply -f -
 ----
 
 == Demonstration
@@ -96,7 +99,7 @@ $ kustomize build kustomization/oauth | oc apply -f -
 
 === Observability
 
-.stringData for thanos config
+.**stringData for thanos config**
 [TIP]
 We have to be roundabout thanks to thanos config coming from a file.
 Let me know if you have a snazzy automation for this.
@@ -104,15 +107,15 @@ Let me know if you have a snazzy automation for this.
 * Deploy obeservability
 
 [source,bash]
-kustomize build kustomize/observability | oc apply -f - 
+$ kustomize build kustomize/observability | oc apply -f -
 
 * Configure Thanos with Object Bucket credentials 
 
 [source,bash]
 ----
 # update kustomize/observability/secretes/thanos-object-storage.yaml
-vi kustomize/observability/secretes/thanos-object-storage.yaml 
-oc apply -f kustomize/observability/secretes/thanos-object-storage.yaml
+$ vi kustomize/observability/secretes/thanos-object-storage.yaml
+$ oc apply -f kustomize/observability/secretes/thanos-object-storage.yaml
 ----
 
 * Ensure firewall access from managed clusters to hub cluster at `observatorium-api-open-cluster-management-observability.apps.<cluster>.<domain>:443`
@@ -123,18 +126,18 @@ oc apply -f kustomize/observability/secretes/thanos-object-storage.yaml
 
 [source,bash]
 ----
-kustomize build clusters/aws-demo/kustomize/clusterdeployment | oc delete -f -
-kustomize build clusters/az-demo/kustomize/clusterdeployment | oc delete -f -
+$ kustomize build clusters/aws-demo/kustomize/clusterdeployment | oc delete -f -
+$ kustomize build clusters/az-demo/kustomize/clusterdeployment  | oc delete -f -
 
-kustomize build clusters/vsphere-demo/kustomize/clusterdeployment | oc apply -f -
+$ kustomize build clusters/vsphere-demo/kustomize/clusterdeployment | oc apply -f -
 ----
 
 === Destroy ClusterPools
 
 [source,bash]
 ----
-kustomize build clusterpools/aws-edge | oc delete -f -
-kustomize build clusterpools/az-edge | oc delete -f -
+$ kustomize build clusterpools/aws-edge | oc delete -f -
+$ kustomize build clusterpools/az-edge  | oc delete -f -
 ----
 
 == Status
