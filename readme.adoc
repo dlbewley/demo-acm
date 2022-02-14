@@ -99,7 +99,9 @@ $ kustomize build kustomization/oauth | oc apply -f -
 
 === Observability
 
-* Deploy RHACM https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html-single/observability/index[Observability Service]
+Deploy RHACM https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html-single/observability/index[Observability Service]
+
+* Extract the pull secret to be replicated into observability namespace
 
 [source,bash]
 $ oc extract secret/pull-secret -n openshift-config --to=kustomize/observability/secrets --confirm
@@ -110,7 +112,7 @@ $ kustomize build kustomize/observability | oc apply -f -
 We have to be roundabout thanks to thanos config coming from stringdata.
 Let me know if you have a snazzy automation for this.
 
-* Update Thanos Config Secret with Object Bucket credentials 
+* Update Thanos Config Secret with Object Bucket credentials link::kustomize/observability/secrets/thanos-object-storage.yaml[]
 
 [source,bash]
 ----
