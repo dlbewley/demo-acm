@@ -99,7 +99,7 @@ $ kustomize build kustomization/oauth | oc apply -f -
 
 === Observability
 
-* Deploy obeservability
+* Deploy RHACM https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html-single/observability/index[Observability Service]
 
 [source,bash]
 $ oc extract secret/pull-secret -n openshift-config --to=kustomize/observability/secrets --confirm
