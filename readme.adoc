@@ -99,26 +99,35 @@ $ kustomize build kustomization/oauth | oc apply -f -
 
 === Observability
 
-.**stringData for thanos config**
-[TIP]
-We have to be roundabout thanks to thanos config coming from a file.
-Let me know if you have a snazzy automation for this.
-
 * Deploy obeservability
 
 [source,bash]
+$ oc extract secret/pull-secret -n openshift-config --to=kustomize/observability/secrets --confirm
 $ kustomize build kustomize/observability | oc apply -f -
 
-* Configure Thanos with Object Bucket credentials 
+.**stringData for thanos config**
+[IMPORTANT]
+We have to be roundabout thanks to thanos config coming from stringdata.
+Let me know if you have a snazzy automation for this.
+
+* Update Thanos Config Secret with Object Bucket credentials 
 
 [source,bash]
 ----
-# update kustomize/observability/secretes/thanos-object-storage.yaml
-$ vi kustomize/observability/secretes/thanos-object-storage.yaml
-$ oc apply -f kustomize/observability/secretes/thanos-object-storage.yaml
+# update kustomize/observability/secrets/thanos-object-storage.yaml
+# follow instructions in dummy values
+$ vi kustomize/observability/secrets/thanos-object-storage.yaml
+
+# kustomize redeploy with updated secret
+$ kustomize build kustomize/observability | oc apply -f -
+
+# or apply secret file individually
+#$ oc apply -f kustomize/observability/secrets/thanos-object-storage.yaml
 ----
 
-* Ensure firewall access from managed clusters to hub cluster at `observatorium-api-open-cluster-management-observability.apps.<cluster>.<domain>:443`
+* Ensure firewall access is permitted from managed clusters to the hub cluster at `observatorium-api-open-cluster-management-observability.apps.<cluster>.<domain>:443`
+
+* Visit Grafana interface at `https://multicloud-console.<domain>/grafana/` and see cluster metrics arrive within a few minutes.
 
 == Cleanup
 
