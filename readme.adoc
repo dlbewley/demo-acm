@@ -112,7 +112,7 @@ $ kustomize build kustomize/observability | oc apply -f -
 We have to be roundabout thanks to thanos config coming from stringdata.
 Let me know if you have a snazzy automation for this.
 
-* Update Thanos Config Secret with Object Bucket credentials link::kustomize/observability/secrets/thanos-object-storage.yaml[]
+* Update Thanos Config Secret with Object Bucket credentials link:kustomize/observability/secrets/thanos-object-storage.yaml[]
 
 [source,bash]
 ----
