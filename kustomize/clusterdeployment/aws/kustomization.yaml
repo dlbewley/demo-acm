@@ -12,3 +12,7 @@ secretGenerator:
   - name: aws-creds
     envs:
       - secrets/.env.aws
+    files:
+      - secrets/ssh-privatekey
+      - secrets/baseDomain
+      - secrets/pullSecret
