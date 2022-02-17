@@ -7,7 +7,7 @@ About this demo
 * ClusterDeployments
 * ClusterPools
 * ClusterSets
-* Observability
+* <<Observability>>
 
 == Deployment
 
@@ -105,6 +105,10 @@ Deploy RHACM https://access.redhat.com/documentation/en-us/red_hat_advanced_clus
 
 [source,bash]
 $ oc extract secret/pull-secret -n openshift-config --to=kustomize/observability/secrets --confirm
+
+* Deploy 
+
+[source,bash]
 $ kustomize build kustomize/observability | oc apply -f -
 
 .**stringData for thanos config**
@@ -116,20 +120,16 @@ Let me know if you have a snazzy automation for this.
 
 [source,bash]
 ----
-# update kustomize/observability/secrets/thanos-object-storage.yaml
-# follow instructions in dummy values
+# update thanos config by following instructions in the dummy values
 $ vi kustomize/observability/secrets/thanos-object-storage.yaml
 
-# kustomize redeploy with updated secret
+# redeploy with updated secret
 $ kustomize build kustomize/observability | oc apply -f -
-
-# or apply secret file individually
-#$ oc apply -f kustomize/observability/secrets/thanos-object-storage.yaml
 ----
 
 * Ensure firewall access is permitted from managed clusters to the hub cluster at `observatorium-api-open-cluster-management-observability.apps.<cluster>.<domain>:443`
 
-* Visit Grafana interface at `https://multicloud-console.<domain>/grafana/` and see cluster metrics arrive within a few minutes.
+* Visit Grafana interface at `https://multicloud-console.apps.<cluster>.<domain>/grafana/` and see cluster metrics arrive within a few minutes.
 
 == Cleanup
 

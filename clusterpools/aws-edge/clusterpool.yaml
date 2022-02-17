@@ -12,7 +12,8 @@ metadata:
 spec:
   baseDomain: aws.tofu.org
   imageSetRef:
-    name: img4.8.12-x86-64-appsub
+    #quay.io/openshift-release-dev/ocp-release:4.9.21-x86_64
+    name: img4.9.21-x86-64-appsub
   # do not create worker machinepool
   skipMachinePools: true
   installConfigSecretTemplateRef:

@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 metadata:
   name: demo
@@ -8,9 +9,9 @@ controlPlane:
   replicas: 1
   platform:
     vsphere:
-      cpus:  8
-      coresPerSocket:  2
-      memoryMB: 24552
+      cpus: 12
+      coresPerSocket:  1
+      memoryMB: 32768
       osDisk:
         diskSizeGB: 100
 compute:
@@ -33,6 +34,7 @@ platform:
     cluster: Goat
     defaultDatastore: VMData-HD
     vCenter: vcenter.lab.bewley.net
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1996188
     password: EXAMPLE
     username: administrator@vcenter.lab.bewley.net
 pullSecret: "" # skip, hive will inject based on it's secrets
