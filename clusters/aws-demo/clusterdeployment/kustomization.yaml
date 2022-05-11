@@ -4,7 +4,8 @@ kind: Kustomization
 namespace: demo-aws-tofu-org
 
 bases:
-  - ../../../../kustomize/clusterdeployment/aws
+  - ../../../credentials/aws
+  - ../../../kustomize/clusterdeployment/aws
 
 generatorOptions:
   disableNameSuffixHash: true
