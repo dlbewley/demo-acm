@@ -2,17 +2,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: edge-pool
+namespace: aws-pool
 
 bases:
-  # cloud provider and pull secrets
-  - ../../kustomize/clusterdeployment/azure
+  - ../../credentials/aws
 
 generatorOptions:
   disableNameSuffixHash: true
 
 secretGenerator:
-  - name: az-install-config
+  - name: aws-install-config
     files:
       - install-config.yaml
 

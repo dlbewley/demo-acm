@@ -1,8 +1,8 @@
 ---
-# edge single node cluster depoyment on AWS
+# single node cluster depoyment on AWS pool
 apiVersion: v1
 metadata:
-  name: edge
+  name: pool 
 baseDomain: aws.tofu.org
 compute:
 - architecture: amd64

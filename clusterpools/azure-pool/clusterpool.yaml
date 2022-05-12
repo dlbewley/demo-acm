@@ -2,27 +2,27 @@
 apiVersion: hive.openshift.io/v1
 kind: ClusterPool
 metadata:
-  name: aws-edge
-  namespace: edge-pool
+  name: azure-pool
   labels:
     cluster.open-cluster-management.io/clusterset: edge
-    cloud: AWS
-    region: us-west-2
+    cloud: Azure
+    region: westus2
     vendor: OpenShift
+    customer: Tofu.org
 spec:
-  baseDomain: aws.tofu.org
+  baseDomain: az.tofu.org
   imageSetRef:
-    #quay.io/openshift-release-dev/ocp-release:4.10.5-x86_64
     name: img4.10.5-x86-64-appsub
   # do not create worker machinepool
   skipMachinePools: true
   installConfigSecretTemplateRef:
-    name: aws-install-config
+    name: az-install-config
   platform:
-    aws:
+    azure:
+      baseDomainResourceGroupName: ocp
       credentialsSecretRef:
-        name: aws-creds
-      region: us-west-2
+        name: azure-creds
+      region: westus2
   pullSecretRef:
     name: pull-secret
   size: 2
