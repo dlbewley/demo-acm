@@ -6,7 +6,7 @@ metadata:
   labels:
     cluster.open-cluster-management.io/clusterset: edge
     cloud: Azure
-    region: westus2
+    region: westus
     vendor: OpenShift
     customer: Tofu.org
 spec:
@@ -22,7 +22,7 @@ spec:
       baseDomainResourceGroupName: ocp
       credentialsSecretRef:
         name: azure-creds
-      region: westus2
+      region: westus
   pullSecretRef:
     name: pull-secret
   size: 2

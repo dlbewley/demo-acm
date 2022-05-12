@@ -30,7 +30,7 @@ platform:
     baseDomainResourceGroupName: ocp
     cloudName: AzurePublicCloud
     outboundType: Loadbalancer
-    region: westus2
+    region: westus
 publish: External
 pullSecret: "" # skip, hive will inject based on it's secrets
 sshKey: |-
