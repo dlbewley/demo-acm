@@ -1,0 +1,24 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: demo-az-tofu-org
+
+bases:
+  - ../../credentials/azure
+  # - ../../kustomize/oauth
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+  - name: install-config
+    files:
+      - install-config.yaml
+
+resources:
+  - namespace.yaml
+  - managedcluster.yaml
+  - clusterdeployment.yaml
+  - machinepool.yaml
+  - klusterletaddonconfig.yaml

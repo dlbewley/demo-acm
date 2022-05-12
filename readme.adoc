@@ -17,17 +17,18 @@ I use `kustomize build foo | oc apply -f -`, but you may wish to use `oc apply -
 
 === Configure Credentials Secrets
 
-* Update the values found in example secrets
+* Update the values found in example secrets with your credentials.
 
 [source,bash]
 $ find . -name secrets -o -name certs
+./credentials/vsphere/secrets
+./credentials/vsphere/certs
+./credentials/azure/secrets
+./credentials/aws/secrets
+./credentials/ocm/secrets
+./credentials/base/secrets
+./credentials/base/certs
 ./kustomize/oauth/secrets
-./kustomize/clusterdeployment/vsphere/secrets
-./kustomize/clusterdeployment/vsphere/certs
-./kustomize/clusterdeployment/azure/secrets
-./kustomize/clusterdeployment/aws/secrets
-./kustomize/clusterdeployment/base/secrets
-./kustomize/clusterdeployment/base/certs
 ./kustomize/observability/secrets # defer edits
 
 * Generate an htpasswd from the values found in link:kustomize/oauth/secrets/[kustomize/oauth/secrets/]
@@ -38,28 +39,41 @@ $ cd kustomize/oauth/secrets
 $ ../../../bin/mkhtpasswd
 ----
 
-* Update vCenter password in vsphere example until <https://bugzilla.redhat.com/show_bug.cgi?id=1996188> resolves
+* Update vCenter password (`.platform.vsphere.password`) in vsphere example until <https://bugzilla.redhat.com/show_bug.cgi?id=1996188> resolves
 
 [source,bash]
-$ vi clusters/vsphere-demo/kustomize/clusterdeployment/install-config.yaml
+$ vi clusters/vsphere-demo/install-config.yaml
 
-=== Deploy Clusters
+=== Create Credentials for Cloud Providers
 
 [source,bash]
 ----
-$ kustomize build clusters/aws-demo/kustomize/clusterdeployment     | oc apply -f -
+# kustomize build credentials/hub       | oc apply -f -
+$ kustomize build credentials/aws       | oc apply -f -
+$ kustomize build credentials/azure     | oc apply -f -
+$ kustomize build credentials/ocm       | oc apply -f -
+$ kustomize build credentials/vsphere   | oc apply -f -
+----
 
-$ kustomize build clusters/az-demo/kustomize/clusterdeployment      | oc apply -f -
+=== Deploy Clusters
 
-$ kustomize build clusters/vsphere-demo/kustomize/clusterdeployment | oc apply -f -
+* Deploy cluster to desired cloud.
+
+[source,bash]
+----
+$ kustomize build clusters/aws-demo     | oc apply -f -
+
+$ kustomize build clusters/az-demo      | oc apply -f -
+
+$ kustomize build clusters/vsphere-demo | oc apply -f -
 ----
 
 === Deploy ClusterPools
 
 [source,bash]
 ----
-$ kustomize build clusterpools/aws-edge | oc apply -f -
-$ kustomize build clusterpools/az-edge  | oc apply -f -
+$ kustomize build clusterpools/aws-pool | oc apply -f -
+$ kustomize build clusterpools/az-pool  | oc apply -f -
 ----
 
 == Demonstration
@@ -68,12 +82,12 @@ $ kustomize build clusterpools/az-edge  | oc apply -f -
 
 [source,bash]
 ----
-$ oc get clusterpools aws-edge -n edge-pool 
-$ oc get clusterpools az-edge -n edge-pool 
-$ oc get namespaces | grep edge 
+$ oc get clusterpools aws-pool -n aws-pool
+$ oc get clusterpools azure-pool -n azure-pool
+$ oc get namespaces | grep pool
 
-$ oc get namespaces -l hive.openshift.io/cluster-pool-name=aws-edge
-$ oc get namespaces -l hive.openshift.io/cluster-pool-name=az-edge
+$ oc get namespaces -l hive.openshift.io/cluster-pool-name=aws-pool
+$ oc get namespaces -l hive.openshift.io/cluster-pool-name=az-pool
 ----
 
 === Access Clusters
@@ -137,24 +151,23 @@ $ kustomize build kustomize/observability | oc apply -f -
 
 [source,bash]
 ----
-$ kustomize build clusters/aws-demo/kustomize/clusterdeployment | oc delete -f -
-$ kustomize build clusters/az-demo/kustomize/clusterdeployment  | oc delete -f -
+$ kustomize build clusters/aws-demo | oc delete -f -
+$ kustomize build clusters/az-demo  | oc delete -f -
 
-$ kustomize build clusters/vsphere-demo/kustomize/clusterdeployment | oc apply -f -
+$ kustomize build clusters/vsphere-demo | oc delete -f -
 ----
 
 === Destroy ClusterPools
 
 [source,bash]
 ----
-$ kustomize build clusterpools/aws-edge | oc delete -f -
-$ kustomize build clusterpools/az-edge  | oc delete -f -
+$ kustomize build clusterpools/aws-pool | oc delete -f -
+$ kustomize build clusterpools/azure-pool  | oc delete -f -
 ----
 
 == Status
 
 .**Todo**
-* Refactor out ./kustomize?
 * Less setup and more demo
 
 .**Bugs**

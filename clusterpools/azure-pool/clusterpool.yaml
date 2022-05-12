@@ -1,0 +1,28 @@
+---
+apiVersion: hive.openshift.io/v1
+kind: ClusterPool
+metadata:
+  name: azure-pool
+  labels:
+    cluster.open-cluster-management.io/clusterset: edge
+    cloud: Azure
+    region: westus2
+    vendor: OpenShift
+    customer: Tofu.org
+spec:
+  baseDomain: az.tofu.org
+  imageSetRef:
+    name: img4.10.5-x86-64-appsub
+  # do not create worker machinepool
+  skipMachinePools: true
+  installConfigSecretTemplateRef:
+    name: az-install-config
+  platform:
+    azure:
+      baseDomainResourceGroupName: ocp
+      credentialsSecretRef:
+        name: azure-creds
+      region: westus2
+  pullSecretRef:
+    name: pull-secret
+  size: 2
