@@ -2,6 +2,23 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# day 2
+namespace: demo-lab-bewley-net
+
 bases:
-  - oauth
+  - ../../credentials/vsphere
+  # - ../../kustomize/oauth
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+  - name: install-config
+    files:
+      - install-config.yaml
+
+resources:
+  - namespace.yaml
+  - managedcluster.yaml
+  - clusterdeployment.yaml
+  - machinepool.yaml
+  - klusterletaddonconfig.yaml
