@@ -1,0 +1,9 @@
+# here as reference
+spec:
+  identityProviders:
+  - name: HTPasswd
+    mappingMethod: claim
+    type: HTPasswd
+    htpasswd:
+      fileData:
+        name: htpasswd
