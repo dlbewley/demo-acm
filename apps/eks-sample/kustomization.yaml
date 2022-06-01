@@ -1,0 +1,16 @@
+---
+# https://docs.aws.amazon.com/eks/latest/userguide/sample-deployment.html
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: eks-sample-app
+
+# bases:
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+  - namespace.yaml
+  - deployment.yaml
+  - service.yaml
