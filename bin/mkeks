@@ -1,0 +1,30 @@
+#!/bin/bash
+# Create an EKS cluster for demonstrating import to open cluster management
+# https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
+
+export KUBECONFIG=$(mktemp kubeconfig-eks.XXXX)
+echo "Kubeconfig: $KUBECONFIG"
+
+aws --no-cli-pager sts get-caller-identity > /dev/null
+if [ $? -ne 0 ]; then
+  echo "Please login to AWS. Hint: Set AWS_PROFILE"
+  exit 1
+fi
+
+CLUSTER_NAME=${1:-eks-tofu}
+EKS_VERSION=${2:-1.21}
+
+echo eksctl create cluster \
+        --name ${CLUSTER_NAME} \
+        --version ${EKS_VERSION} \
+        --region us-west-2 \
+        --nodegroup-name standard-workers-${CLUSTER_NAME} \
+        --node-type t3.medium \
+        --nodes 3 \
+        --nodes-min 1 \
+        --nodes-max 4 \
+        --ssh-access \
+        --ssh-public-key ~/.ssh/acm.pub \
+        --managed
+
+# eksctl utils describe-stacks --region=us-west-2 --cluster=$CLUSTER_NAME

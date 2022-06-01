@@ -31,12 +31,12 @@ $ find . -name secrets -o -name certs
 ./kustomize/oauth/secrets
 ./kustomize/observability/secrets # defer edits
 
-* Generate an htpasswd from the values found in link:kustomize/oauth/secrets/[kustomize/oauth/secrets/]
+* Generate random passwords and an htpasswd from the values found in link:kustomize/oauth/secrets/[kustomize/oauth/secrets/]
 
 [source,bash]
 ----
 $ cd kustomize/oauth/secrets
-$ ../../../bin/mkhtpasswd
+$ make
 ----
 
 * Update vCenter password (`.platform.vsphere.password`) in vsphere example until <https://bugzilla.redhat.com/show_bug.cgi?id=1996188> resolves
@@ -58,22 +58,23 @@ $ kustomize build credentials/vsphere   | oc apply -f -
 === Deploy Clusters
 
 * Deploy cluster to desired cloud.
-
 [source,bash]
 ----
 $ kustomize build clusters/aws-demo     | oc apply -f -
-
 $ kustomize build clusters/az-demo      | oc apply -f -
-
 $ kustomize build clusters/vsphere-demo | oc apply -f -
 ----
+
+==== Deploy EKS Cluster
+
+Use script link:bin/mkeks[bin/mkeks] to deploy an EKS cluster.
 
 === Deploy ClusterPools
 
 [source,bash]
 ----
-$ kustomize build clusterpools/aws-pool | oc apply -f -
-$ kustomize build clusterpools/az-pool  | oc apply -f -
+$ kustomize build clusterpools/aws-pool   | oc apply -f -
+$ kustomize build clusterpools/azure-pool | oc apply -f -
 ----
 
 == Demonstration
@@ -87,7 +88,7 @@ $ oc get clusterpools azure-pool -n azure-pool
 $ oc get namespaces | grep pool
 
 $ oc get namespaces -l hive.openshift.io/cluster-pool-name=aws-pool
-$ oc get namespaces -l hive.openshift.io/cluster-pool-name=az-pool
+$ oc get namespaces -l hive.openshift.io/cluster-pool-name=azure-pool
 ----
 
 === Access Clusters
@@ -105,11 +106,11 @@ $ export KUBECONFIG=demo-az-tofu-org/auth/kubeconfig
 $ oc describe console
 ----
 
-* Configure htpasswd auth
+* Configure htpasswd auth. This will create the htpasswd secret. You must modify the `oauth/cluster` resource by hand. See link:kustomize/oauth/patch-oauth.yaml[]
 
 [source,bash]
 $ export KUBECONFIG=demo-az-tofu-org/auth/kubeconfig
-$ kustomize build kustomization/oauth | oc apply -f -
+$ kustomize build kustomize/oauth | oc apply -f -
 
 === Observability
 
@@ -128,7 +129,7 @@ $ kustomize build kustomize/observability | oc apply -f -
 .**stringData for thanos config**
 [IMPORTANT]
 We have to be roundabout thanks to thanos config coming from stringdata.
-Let me know if you have a snazzy automation for this.
+Let me know if you have a snazzy automation for this. I guess this would work <https://github.com/redhat-cop/gitops-catalog/blob/main/advanced-cluster-management/instance/observability/02-install-observability.yaml>
 
 * Update Thanos Config Secret with Object Bucket credentials link:kustomize/observability/secrets/thanos-object-storage.yaml[]
 
@@ -144,6 +145,35 @@ $ kustomize build kustomize/observability | oc apply -f -
 * Ensure firewall access is permitted from managed clusters to the hub cluster at `observatorium-api-open-cluster-management-observability.apps.<cluster>.<domain>:443`
 
 * Visit Grafana interface at `https://multicloud-console.apps.<cluster>.<domain>/grafana/` and see cluster metrics arrive within a few minutes.
+
+==== Observability for EKS
+
+OpenShift will "just work", but for EKS you must https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html[deploy the Kubernetes Metrics Server] to EKS cluster
+
+[source,bash]
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+== Install Demo Materials
+
+* Install compliance operator, and setup auto scanning
+
+[source,bash]
+----
+# do this twice:
+$ oc apply -k 'https://github.com/redhat-cop/gitops-catalog/compliance-operator/aggregate/demo?ref=main'
+----
+
+Set policy-cis to enforcing
+
+=== Deploy Sample Apps to EKS
+
+[source,bash]
+kustomize build apps/eks-sample | kubectl apply -f -
+
+.Deploy to EKS:
+* sample https://docs.aws.amazon.com/eks/latest/userguide/sample-deployment.html
+* guestbook https://docs.aws.amazon.com/eks/latest/userguide/eks-guestbook.html
+* k8s dashboard https://docs.aws.amazon.com/eks/latest/userguide/dashboard-tutorial.html
 
 == Cleanup
 
