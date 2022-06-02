@@ -4,7 +4,7 @@ kind: ClusterPool
 metadata:
   name: aws-pool
   labels:
-    cluster.open-cluster-management.io/clusterset: edge
+    cluster.open-cluster-management.io/clusterset: qa-cs
     cloud: AWS
     region: us-west-2
     vendor: OpenShift

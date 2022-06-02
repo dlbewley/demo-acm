@@ -18,3 +18,4 @@ secretGenerator:
 resources:
   - namespace.yaml
   - clusterpool.yaml
+  - managedclusterset.yaml

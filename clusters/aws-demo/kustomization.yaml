@@ -19,6 +19,7 @@ secretGenerator:
 resources:
   - namespace.yaml
   - managedcluster.yaml
+  - managedclusterset.yaml
   - clusterdeployment.yaml
   - machinepool.yaml
   - klusterletaddonconfig.yaml
