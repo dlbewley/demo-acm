@@ -1,0 +1,7 @@
+Creates an application 'demo-acm-policies' for deployment of the policies found at the top of this repo.
+
+* Deploy
+
+[source,bash]
+oc apply -k .
+oc get subscriptions -n demo-acm-policies

@@ -8,7 +8,6 @@ metadata:
   labels:
     app: demo-acm-policies
   name: demo-acm-policies-sub
-  namespace: policies
 spec:
   channel: policies/demo-acm-policies-chan
   placement:
