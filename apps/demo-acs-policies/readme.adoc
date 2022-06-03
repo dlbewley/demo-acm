@@ -1,0 +1,1 @@
+Creates an application 'demo-acs-policies' for deployment of the policies found at the top of this repo.
