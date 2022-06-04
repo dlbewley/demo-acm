@@ -1,0 +1,4 @@
+
+Should subscribe to gitops catalog. See apps/acs-central for the goal of this policy.
+
+Presently it fails because it is trying to create a channel on the demo cluster which does not have acm installed. this is a flaw in the placement bindings...

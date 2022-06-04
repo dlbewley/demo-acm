@@ -9,7 +9,7 @@ metadata:
   name: policy-acs-central
 spec:
   disabled: false
-  remediationAction: enforce # overrides remediationAction in policy-templates
+  remediationAction: inform # overrides remediationAction in policy-templates
   policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
@@ -76,7 +76,7 @@ spec:
                   placement:
                     placementRef:
                       kind: PlacementRule
-                      name: placement-policy-acs-operator
+                      name: placement-policy-acs-
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
