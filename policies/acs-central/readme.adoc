@@ -36,4 +36,7 @@ oc get secrets -n stackrox | grep tls
 == Todo
 
 .Bugs
-* Because it uses `Channel` CR, this policy fails when applied to a custer not running ACM.
+* Because it uses `Channel` CR, this policy fails when applied to a custer that does not have ACM operator and associated open-cluster-management.io API groups installed. Installing RHACM provides the `Channel` resource, but the `Subscription` resource is not recognized. Is that because a `MulticlusterHub` must be created first or a flaw in my policy?
+** Possible fix: write a policy to install RHACM, use GitOps instead?
+** Symptom: _NonCompliant; violation - couldn't find mapping resource with kind Subscription, please check if you have CRD deployed View details_
+** Note: Maybe reconciliation is lagging. Waiting. TBD
