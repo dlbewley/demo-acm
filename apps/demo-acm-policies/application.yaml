@@ -7,13 +7,12 @@ metadata:
   name: demo-acm-policies-app
 spec:
   componentKinds:
-  - group: apps.open-cluster-management.io
-    kind: Subscription
+    - group: apps.open-cluster-management.io
+      kind: Subscription
   descriptor: {}
   selector:
     matchExpressions:
-    - key: app
-      operator: In
-      values:
-      - demo-acm-policies
-
+      - key: app
+        operator: In
+        values:
+          - demo-acm-policies

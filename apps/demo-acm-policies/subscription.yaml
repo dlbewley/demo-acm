@@ -7,6 +7,9 @@ metadata:
     apps.open-cluster-management.io/git-path: policies
   labels:
     app: demo-acm-policies
+    app.kubernetes.io/part-of: demo-acm-policies
+    apps.open-cluster-management.io/reconcile-rate: medium
+    apps.open-cluster-management.io/reconcile-option: merge
   name: demo-acm-policies-sub
 spec:
   channel: policies/demo-acm-policies-chan
