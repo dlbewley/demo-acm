@@ -1,0 +1,22 @@
+
+include::../meta.adoc[]
+
+= Demo Policies
+
+These are policies that my ficticious company "TofuOrg" wants to ensure are applied consistently to our OpenShift Kubernetes environments.
+
+These policies have an annotation `policy.open-cluster-management.io/standards: TofuOrg-Standards` to group them in the ACM console.
+
+.Be sure to see more example policies
+* <https://github.com/stolostron/policy-collection>
+* <https://github.com/SimonDelord/ACM-Templates/tree/master/resources12>
+
+== Deploy
+
+These policies may be applied by deploying the link:../apps/demo-acm-policies[demo-acm-policies] app in this repo and placing it on the ACM hub cluster.
+
+== Policies
+
+include::acs-operator/readme.adoc[leveloffset=+2]
+
+include::acs-central/readme.adoc[leveloffset=+2]
