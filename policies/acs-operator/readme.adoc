@@ -1,10 +1,12 @@
-Policy 'acs'
+= Policy ACS-Central
+
 will deploy an ACS hub to clusters  labeled environment = infra.
 
 Policy has annotation policy.open-cluster-management.io/standards: TofuOrg-Standards to group policies for our "company" Tofu.org
 
 This work is derivative of Simon Delord's <https://github.com/SimonDelord/ACM-Templates/tree/master/resources12>
 
+== Deploy
 
 [source,bash]
 ----

@@ -1,4 +1,34 @@
+= Policy ACS-Central
 
-Should subscribe to gitops catalog. See apps/acs-central for the goal of this policy.
+Once the RHACS operator is installed it must be configured to act as the "manager" (Central) or an "agent" (SecuredCluster). 
 
-Presently it fails because it is trying to create a channel on the demo cluster which does not have acm installed. this is a flaw in the placement bindings...
+To act as the ACS "manager hub" for an environment a `Central` must be created.
+
+The same cluster can be central and secured of course.
+
+.WIP
+* See link:../../apps/acs-instance.yaml[]
+
+== Description
+
+Ensures that a cluster is configured to host ACS Central services
+
+.Effect
+* Create Application to deploy ACS Central and generate cluster init
+* Create Subscription to above Application
+* Apply Subscription
+
+.Remediation
+* Inform
+
+.Scope
+* local-cluster 
+
+== Deploy
+
+[source,bash]
+----
+oc apply -k .
+oc get central -n stackrox
+oc get secrets -n stackrox | grep tls
+--
