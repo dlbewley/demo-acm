@@ -7,7 +7,7 @@ To act as the ACS "manager hub" for an environment a `Central` must be created.
 The same cluster can be central and secured of course.
 
 .WIP
-* See link:../../apps/acs-instance.yaml[]
+* See link:../../../apps/acs-instance.yaml[]
 
 == Description
 
@@ -22,7 +22,7 @@ Ensures that a cluster is configured to host ACS Central services
 * Inform
 
 .Scope
-* local-cluster 
+* environment=infra
 
 == Deploy
 
