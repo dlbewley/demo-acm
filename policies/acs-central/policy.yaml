@@ -87,19 +87,21 @@ spec:
           remediationAction: enforce
           severity: high
           object-templates:
-            apiVersion: app.k8s.io/v1beta1
-            kind: Application
-            metadata:
-              name: acs-central
-              namespace: app-acs
-            spec:
-              componentKinds:
-              - group: apps.open-cluster-management.io
-                kind: Subscription
-              descriptor: {}
-              selector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - acs-central
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: app.k8s.io/v1beta1
+                kind: Application
+                metadata:
+                  name: acs-central
+                  namespace: app-acs
+                spec:
+                  componentKinds:
+                  - group: apps.open-cluster-management.io
+                    kind: Subscription
+                  descriptor: {}
+                  selector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                      - acs-central

@@ -32,3 +32,8 @@ oc apply -k .
 oc get central -n stackrox
 oc get secrets -n stackrox | grep tls
 ----
+
+== Todo
+
+.Bugs
+* Because it uses `Channel` CR, this policy fails when applied to a custer not running ACM.
