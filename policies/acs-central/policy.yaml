@@ -70,7 +70,7 @@ spec:
                   labels:
                     app: acs-central
                   name: acs-central-subscription
-                  namespace: null
+                  namespace: app-acs
                 spec:
                   channel: app-acs/acs-overlays-default
                   placement:
@@ -91,7 +91,7 @@ spec:
             kind: Application
             metadata:
               name: acs-central
-              namespace: null
+              namespace: app-acs
             spec:
               componentKinds:
               - group: apps.open-cluster-management.io
