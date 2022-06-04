@@ -19,7 +19,7 @@ Ensures that a cluster is configured to host ACS Central services
 * Apply Subscription
 
 .Remediation
-* Inform
+* Enforce
 
 .Scope
 * environment=infra
