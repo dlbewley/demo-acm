@@ -31,4 +31,4 @@ Ensures that a cluster is configured to host ACS Central services
 oc apply -k .
 oc get central -n stackrox
 oc get secrets -n stackrox | grep tls
---
+----

@@ -1,19 +1,24 @@
-= Policy ACS-Central
+= Policy ACS-Operator
 
-will deploy an ACS hub to clusters  labeled environment = infra.
+== Description
 
-Policy has annotation policy.open-cluster-management.io/standards: TofuOrg-Standards to group policies for our "company" Tofu.org
+Ensure that the RHACS Operator is installed.
 
 This work is derivative of Simon Delord's <https://github.com/SimonDelord/ACM-Templates/tree/master/resources12>
+
+.Effect
+* Install RHACM Operator
+
+.Remediation
+* Enforce
+
+.Scope
+* environment=infra
 
 == Deploy
 
 [source,bash]
 ----
-# create policy which will install acs to environment=infra clusters
-cd policies/acs
 oc apply -k .
-
-#
 oc label managedcluster/demo-aws-tofu-org -n demo-aws-tofu-org environment=infra
 ----
