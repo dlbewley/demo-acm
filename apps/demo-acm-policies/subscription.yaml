@@ -12,7 +12,7 @@ metadata:
     apps.open-cluster-management.io/reconcile-option: merge
   name: demo-acm-policies-sub
 spec:
-  channel: policies/demo-acm-policies-chan
+  channel: demo-acm-policies/demo-acm-policies-chan
   placement:
     placementRef:
       kind: PlacementRule
