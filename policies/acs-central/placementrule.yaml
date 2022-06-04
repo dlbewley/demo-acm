@@ -1,0 +1,16 @@
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  labels:
+    app: acs
+  name: placement-policy-acs-central
+  namespace: null
+spec:
+  clusterSelector:
+    matchExpressions:
+    - key: environment
+      operator: In
+      values:
+      - infra
+

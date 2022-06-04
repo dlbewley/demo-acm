@@ -1,0 +1,105 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  annotations:
+    policy.open-cluster-management.io/categories: Operators-Install
+    policy.open-cluster-management.io/controls: ACS-Operator
+    policy.open-cluster-management.io/standards: TofuOrg-Standards
+  name: policy-acs-central
+spec:
+  disabled: false
+  remediationAction: enforce # overrides remediationAction in policy-templates
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-central-ns
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: app-acs
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-central-channel
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps.open-cluster-management.io/v1
+                kind: Channel
+                metadata:
+                  annotations:
+                    apps.open-cluster-management.io/reconcile-rate: medium
+                  name: acs-overlays-default
+                  namespace: app-acs
+                spec:
+                  pathname: https://github.com/redhat-cop/gitops-catalog.git
+                  type: Git
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-central-subscription
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps.open-cluster-management.io/v1
+                kind: Subscription
+                metadata:
+                  annotations:
+                    apps.open-cluster-management.io/git-branch: main
+                    apps.open-cluster-management.io/git-path: advanced-cluster-security-operator/instance/overlays/default
+                    apps.open-cluster-management.io/reconcile-option: merge
+                  labels:
+                    app: acs-central
+                  name: acs-central-subscription
+                  namespace: null
+                spec:
+                  channel: app-acs/acs-overlays-default
+                  placement:
+                    placementRef:
+                      kind: PlacementRule
+                      name: placement-policy-acs-operator
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-central-application
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            apiVersion: app.k8s.io/v1beta1
+            kind: Application
+            metadata:
+              name: acs-central
+              namespace: null
+            spec:
+              componentKinds:
+              - group: apps.open-cluster-management.io
+                kind: Subscription
+              descriptor: {}
+              selector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - acs-central
