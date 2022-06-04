@@ -1,0 +1,6 @@
+:toc:
+:toclevels: 5
+:icons: font
+:sectanchors:
+:sectlinks:
+:toc: []
