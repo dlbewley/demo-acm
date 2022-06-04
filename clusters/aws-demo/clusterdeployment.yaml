@@ -8,6 +8,7 @@ metadata:
     region: 'us-west-2'
     vendor: 'OpenShift'
     usage: development
+    environment: infra
     customer: 'Tofu.org'
 spec:
   baseDomain: aws.tofu.org
