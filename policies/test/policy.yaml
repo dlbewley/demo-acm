@@ -1,0 +1,42 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  annotations:
+    policy.open-cluster-management.io/categories: Operators-Install
+    policy.open-cluster-management.io/controls: ACS-Operator
+    policy.open-cluster-management.io/standards: TofuOrg-Standards
+  name: policy-acs-test
+spec:
+  disabled: false
+  remediationAction: enforce # overrides remediationAction in policy-templates
+  policy-templates:
+    - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: demo-fromsecret
+        namespace: test
+      spec:
+        namespaceSelector:
+          exclude:
+            - kube-*
+          include:
+            - stackrox
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: v1
+              kind: Namespace
+              metadata:
+                name: dale
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: v1
+              data: |
+                '{{ fromSecret "stackrox" "collector-tls" "ca.pem" }}'
+              kind: Secret
+              metadata:
+                name: collector-tls-test
+                namespace: dale
+              type: Opaque
