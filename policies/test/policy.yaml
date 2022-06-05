@@ -3,10 +3,10 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
   annotations:
-    policy.open-cluster-management.io/categories: Operators-Install
+    policy.open-cluster-management.io/categories: Operators-Config
     policy.open-cluster-management.io/controls: ACS-Operator
     policy.open-cluster-management.io/standards: TofuOrg-Standards
-  name: policy-acs-test
+  name: policy-acs-securedcluster-secrets
 spec:
   disabled: false
   remediationAction: enforce 
@@ -111,3 +111,66 @@ spec:
                     {{ fromSecret "stackrox" "admission-control-tls" "admission-control-cert.pem" }}
                   admission-control-key.pem: |
                     {{ fromSecret "stackrox" "admission-control-tls" "admission-control-key.pem" }}
+
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  annotations:
+    policy.open-cluster-management.io/categories: Operators-Config
+    policy.open-cluster-management.io/controls: ACS-Operator
+    policy.open-cluster-management.io/standards: TofuOrg-Standards
+  name: policy-acs-securedcluster
+spec:
+  disabled: false
+  remediationAction: enforce 
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-acs-securedcluster
+        spec:
+          severity: high
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: platform.stackrox.io/v1alpha1
+                kind: SecuredCluster
+                metadata:
+                  name: '{{ .ManagedClusterName }}'
+                  namespace: dale # stackrox
+                  annotations:
+                    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+                    argocd.argoproj.io/sync-wave: "3"
+                    centralEndpoint: '{{ (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host }}:443'
+                    clusterName: '{{ .ManagedClusterName }}'
+                  finalizers:
+                    - uninstall-helm-release
+                spec:
+                  admissionControl:
+                    bypass: BreakGlassAnnotation
+                    contactImageScanners: DoNotScanInline
+                    listenOnCreates: true
+                    listenOnEvents: true
+                    listenOnUpdates: true
+                    timeoutSeconds: 3
+                  auditLogs:
+                    collection: Auto
+                  # centralEndpoint: '{{ (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host }}:443'
+                  # clusterName: '{{ .ManagedClusterName }}'
+                  perNode:
+                    collector:
+                      collection: KernelModule
+                      imageFlavor: Regular
+                    taintToleration: TolerateTaints
+                  scanner:
+                    analyzer:
+                      scaling:
+                        autoScaling: Enabled
+                        maxReplicas: 5
+                        minReplicas: 2
+                        replicas: 3
+                    scannerComponent: AutoSense

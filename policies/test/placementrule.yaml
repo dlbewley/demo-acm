@@ -4,7 +4,7 @@ kind: PlacementRule
 metadata:
   labels:
     app: acs
-  name: placement-policy-acs-test
+  name: placement-policy-acs-securedcluster
   namespace: null
 spec:
   clusterConditions:
