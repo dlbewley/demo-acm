@@ -11,6 +11,7 @@ spec:
   disabled: false
   remediationAction: enforce # overrides remediationAction in policy-templates
   policy-templates:
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -26,11 +27,12 @@ spec:
                 kind: Namespace
                 metadata:
                   name: dale
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: policy-acs-test-secret
+          name: policy-acs-test-collector
         spec:
           severity: low
           remediationAction: enforce
@@ -38,6 +40,14 @@ spec:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: collector-tls-test
+                  namespace: dale
+                  annotations:
+                    init-bundle.stackrox.io/id: ''
+                    init-bundle.stackrox.io/name: local-cluster
+                type: Opaque
                 data:
                   ca.pem: |
                     {{ fromSecret "stackrox" "collector-tls" "ca.pem" }}
@@ -45,8 +55,61 @@ spec:
                     {{ fromSecret "stackrox" "collector-tls" "collector-cert.pem" }}
                   collector-key.pem: |
                     {{ fromSecret "stackrox" "collector-tls" "collector-key.pem" }}
+
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-acs-test-sensor
+        spec:
+          severity: low
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
                 kind: Secret
                 metadata:
                   name: collector-tls-test
                   namespace: dale
+                  annotations:
+                    init-bundle.stackrox.io/id: ''
+                    init-bundle.stackrox.io/name: local-cluster
                 type: Opaque
+                data:
+                  ca.pem: |
+                    {{ fromSecret "stackrox" "sensor-tls" "ca.pem" }}
+                  sensor-cert.pem: |
+                    {{ fromSecret "stackrox" "sensor-tls" "sensor-cert.pem" }}
+                  sensor-key.pem: |
+                    {{ fromSecret "stackrox" "sensor-tls" "sensor-key.pem" }}
+
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-acs-test-admission-control
+        spec:
+          severity: low
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: admission-control-tls-test
+                  namespace: dale
+                  annotations:
+                    init-bundle.stackrox.io/id: ''
+                    init-bundle.stackrox.io/name: local-cluster
+                type: Opaque
+                data:
+                  ca.pem: |
+                    {{ fromSecret "stackrox" "admission-control-tls" "ca.pem" }}
+                  admission-control-cert.pem: |
+                    {{ fromSecret "stackrox" "admission-control-tls" "admission-control-cert.pem" }}
+                  admission-control-key.pem: |
+                    {{ fromSecret "stackrox" "admission-control-tls" "admission-control-key.pem" }}
