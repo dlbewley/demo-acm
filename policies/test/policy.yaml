@@ -9,7 +9,7 @@ metadata:
   name: policy-acs-test
 spec:
   disabled: false
-  remediationAction: enforce # overrides remediationAction in policy-templates
+  remediationAction: enforce 
   policy-templates:
 
     - objectDefinition:
@@ -56,7 +56,6 @@ spec:
                   collector-key.pem: |
                     {{ fromSecret "stackrox" "collector-tls" "collector-key.pem" }}
 
-
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -71,7 +70,7 @@ spec:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: collector-tls-test
+                  name: sensor-tls-test
                   namespace: dale
                   annotations:
                     init-bundle.stackrox.io/id: ''
@@ -84,7 +83,6 @@ spec:
                     {{ fromSecret "stackrox" "sensor-tls" "sensor-cert.pem" }}
                   sensor-key.pem: |
                     {{ fromSecret "stackrox" "sensor-tls" "sensor-key.pem" }}
-
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
