@@ -40,11 +40,11 @@ spec:
                 apiVersion: v1
                 data:
                   ca.pem: |
-                    '{{ fromSecret "stackrox" "collector-tls" "ca.pem" }}'
+                    {{ fromSecret "stackrox" "collector-tls" "ca.pem" }}
                   collector-cert.pem: |
-                    '{{ fromSecret "stackrox" "collector-tls" "collector-cert.pem" }}'
+                    {{ fromSecret "stackrox" "collector-tls" "collector-cert.pem" }}
                   collector-key.pem: |
-                    '{{ fromSecret "stackrox" "collector-tls" "collector-key.pem" }}'
+                    {{ fromSecret "stackrox" "collector-tls" "collector-key.pem" }}
                 kind: Secret
                 metadata:
                   name: collector-tls-test
