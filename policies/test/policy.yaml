@@ -134,6 +134,9 @@ spec:
         spec:
           severity: high
           remediationAction: enforce
+          namespaceSelector:
+            exclude: ["kube-*"]
+            include: ["stackrox"]
           object-templates:
             - complianceType: musthave
               objectDefinition:
