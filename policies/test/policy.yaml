@@ -140,13 +140,13 @@ spec:
                 apiVersion: platform.stackrox.io/v1alpha1
                 kind: SecuredCluster
                 metadata:
-                  name: '{{ .ManagedClusterName }}'
+                  name: '{{hub .ManagedClusterName hub}}'
                   namespace: dale # stackrox
                   annotations:
                     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
                     argocd.argoproj.io/sync-wave: "3"
-                    centralEndpoint: '{{ (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host }}:443'
-                    clusterName: '{{ .ManagedClusterName }}'
+                    centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+                    clusterName: '{{hub .ManagedClusterName hub}}'
                   finalizers:
                     - uninstall-helm-release
                 spec:
@@ -159,8 +159,8 @@ spec:
                     timeoutSeconds: 3
                   auditLogs:
                     collection: Auto
-                  # centralEndpoint: '{{ (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host }}:443'
-                  # clusterName: '{{ .ManagedClusterName }}'
+                  # centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+                  # clusterName: '{{hub .ManagedClusterName hub}}'
                   perNode:
                     collector:
                       collection: KernelModule
