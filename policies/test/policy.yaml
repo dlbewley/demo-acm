@@ -12,31 +12,36 @@ spec:
   remediationAction: enforce # overrides remediationAction in policy-templates
   policy-templates:
     - objectDefinition:
-      apiVersion: policy.open-cluster-management.io/v1
-      kind: ConfigurationPolicy
-      metadata:
-        name: demo-fromsecret
-        namespace: test
-      spec:
-        namespaceSelector:
-          exclude:
-            - kube-*
-          include:
-            - stackrox
-        object-templates:
-          - complianceType: musthave
-            objectDefinition:
-              apiVersion: v1
-              kind: Namespace
-              metadata:
-                name: dale
-          - complianceType: musthave
-            objectDefinition:
-              apiVersion: v1
-              data: |
-                '{{ fromSecret "stackrox" "collector-tls" "ca.pem" }}'
-              kind: Secret
-              metadata:
-                name: collector-tls-test
-                namespace: dale
-              type: Opaque
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-acs-test-ns
+        spec:
+          severity: high
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: dale
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-acs-test-secret
+        spec:
+          severity: low
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                data: |
+                  '{{ fromSecret "stackrox" "collector-tls" "ca.pem" }}'
+                kind: Secret
+                metadata:
+                  name: collector-tls-test
+                  namespace: dale
+                type: Opaque
