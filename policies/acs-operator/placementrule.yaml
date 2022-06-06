@@ -9,7 +9,7 @@ spec:
       type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - key: environment
+      - key: vendor
         operator: In
         values:
-          - infra
+          - OpenShift
