@@ -20,3 +20,5 @@ These policies may be applied by deploying the link:../apps/demo-acm-policies[de
 include::acs-operator/readme.adoc[leveloffset=+2]
 
 include::acs-central/readme.adoc[leveloffset=+2]
+
+include::acs-securedcluster/readme.adoc[leveloffset=+2]
