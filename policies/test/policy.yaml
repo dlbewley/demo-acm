@@ -134,9 +134,6 @@ spec:
         spec:
           severity: high
           remediationAction: enforce
-          namespaceSelector:
-            exclude: ["kube-*"]
-            include: ["stackrox"]
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -162,8 +159,8 @@ spec:
                     timeoutSeconds: 3
                   auditLogs:
                     collection: Auto
-                  # centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
-                  # clusterName: '{{hub .ManagedClusterName hub}}'
+                  centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+                  clusterName: '{{hub .ManagedClusterName hub}}-test'
                   perNode:
                     collector:
                       collection: KernelModule
