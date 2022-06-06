@@ -7,6 +7,7 @@ metadata:
     policy.open-cluster-management.io/controls: ACS-Operator
     policy.open-cluster-management.io/standards: TofuOrg-Standards
   name: policy-acs-central
+  namespace: open-cluster-management-policies
 spec:
   disabled: false
   remediationAction: enforce
@@ -53,6 +54,35 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: acs-central-placementrule
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps.open-cluster-management.io/v1
+                kind: PlacementRule
+                metadata:
+                  labels:
+                    app: acs
+                  name: placement-rule-acs-central
+                  namespace: app-acs
+                spec:
+                  clusterConditions:
+                  - status: "True"
+                    type: ManagedClusterConditionAvailable
+                  clusterSelector:
+                    matchExpressions:
+                    - key: local-cluster
+                      operator: In
+                      values:
+                      - "true"
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: acs-central-subscription
         spec:
           remediationAction: enforce
@@ -76,7 +106,7 @@ spec:
                   placement:
                     placementRef:
                       kind: PlacementRule
-                      name: open-cluster-management-policies/placement-policy-acs-central
+                      name: placement-rule-acs-central
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1

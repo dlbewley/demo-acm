@@ -3,6 +3,7 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
   name: binding-policy-acs-central
+  namespace: open-cluster-management-policies
 placementRef:
   apiGroup: apps.open-cluster-management.io
   kind: PlacementRule
