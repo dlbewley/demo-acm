@@ -9,7 +9,7 @@ metadata:
   name: policy-acs-securedcluster-secrets
 spec:
   disabled: false
-  remediationAction: enforce 
+  remediationAction: inform 
   policy-templates:
 
     - objectDefinition:
