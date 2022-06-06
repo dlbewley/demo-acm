@@ -19,6 +19,7 @@ This work is derivative of Simon Delord's <https://github.com/SimonDelord/ACM-Te
 
 [source,bash]
 ----
+cd ~/demo-acm/policies/acs-operator
 oc apply -k .
-oc label managedcluster/demo-aws-tofu-org -n demo-aws-tofu-org environment=infra
+oc get csv -n rhacs-operator
 ----

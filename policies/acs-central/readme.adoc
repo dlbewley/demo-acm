@@ -6,6 +6,7 @@ To act as the ACS "manager hub" for an environment a `Central` must be created.
 
 The same cluster can be central and secured of course.
 
+See <https://github.com/redhat-cop/gitops-catalog/tree/main/advanced-cluster-security-operator/instance>
 .WIP
 * See link:../../../apps/acs-instance.yaml[]
 
@@ -22,21 +23,14 @@ Ensures that a cluster is configured to host ACS Central services
 * Enforce
 
 .Scope
-* environment=infra
+* local-cluster=true
 
 == Deploy
 
 [source,bash]
 ----
+cd ~/demo-acm/policies/acs-central
 oc apply -k .
 oc get central -n stackrox
 oc get secrets -n stackrox | grep tls
 ----
-
-== Todo
-
-.Bugs
-* Because it uses `Channel` CR, this policy fails when applied to a custer that does not have ACM operator and associated open-cluster-management.io API groups installed. Installing RHACM provides the `Channel` resource, but the `Subscription` resource is not recognized. Is that because a `MulticlusterHub` must be created first or a flaw in my policy?
-** Possible fix: write a policy to install RHACM, use GitOps instead?
-** Symptom: _NonCompliant; violation - couldn't find mapping resource with kind Subscription, please check if you have CRD deployed View details_
-** Note: Maybe reconciliation is lagging. Waiting. TBD

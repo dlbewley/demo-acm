@@ -13,7 +13,11 @@ These policies have an annotation `policy.open-cluster-management.io/standards: 
 
 == Deploy
 
-These policies may be applied by deploying the link:../apps/demo-acm-policies[demo-acm-policies] app in this repo and placing it on the ACM hub cluster.
+Each of these policies will be applied to the "local-cluster" (ACM hub) by deploying the link:../apps/demo-acm-policies[demo-acm-policies] app in this repo.
+
+[source,bash]
+oc apply -k ~/demo-acm/apps/demo-acm-policies
+oc get subscriptions -n demo-acm-policies
 
 == Policies
 

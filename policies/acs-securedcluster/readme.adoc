@@ -19,5 +19,7 @@ See also <https://github.com/stolostron/policy-collection/tree/main/policygenera
 
 [source,bash]
 ----
+cd ~/demo-acm/policies/acs-securedcluster
 oc apply -k .
+oc get securedcluster -n stackrox
 ----
