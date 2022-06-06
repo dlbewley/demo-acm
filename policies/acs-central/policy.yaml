@@ -76,7 +76,7 @@ spec:
                   placement:
                     placementRef:
                       kind: PlacementRule
-                      name: placement-policy-acs-central
+                      name: open-cluster-management-policies/placement-policy-acs-central
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
