@@ -1,0 +1,39 @@
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  labels:
+    app: acs
+  name: placement-policy-acs-securedcluster
+spec:
+  clusterConditions:
+  - status: "True"
+    type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+    - key: vendor
+      operator: In
+      values:
+      - "OpenShift"
+
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  labels:
+    app: acs
+  name: placement-policy-acs-securedcluster-secrets
+spec:
+  clusterConditions:
+  - status: "True"
+    type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+    - key: vendor
+      operator: In
+      values:
+      - "OpenShift"
+    - key: local-cluster 
+      operator: NotIn 
+      values:
+      - "true"

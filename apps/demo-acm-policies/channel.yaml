@@ -1,0 +1,13 @@
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  annotations:
+    apps.open-cluster-management.io/reconcile-rate: medium
+  labels:
+    app: demo-acm-policies
+  name: demo-acm-policies-chan
+spec:
+  pathname: 'https://github.com/dlbewley/demo-acm.git'
+  type: Git
+

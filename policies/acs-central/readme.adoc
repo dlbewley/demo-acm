@@ -1,0 +1,35 @@
+= Policy ACS-Central
+
+Once the RHACS operator is installed it must be configured to act as the "manager" (Central) or an "agent" (SecuredCluster). 
+
+To act as the ACS "manager hub" for an environment a `Central` must be created.
+
+The same cluster can be central and secured of course.
+
+See <https://github.com/redhat-cop/gitops-catalog/tree/main/advanced-cluster-security-operator/instance>
+
+== Description
+
+Ensures that a cluster is configured to host ACS Central services
+
+.Effect
+* Create Application to deploy ACS Central and generate cluster init bundle
+* Create Subscription to above Application
+* Apply Subscription
+
+.Remediation
+* Enforce
+
+.Scope
+* local-cluster=true
+* cloud=Amazon _(temporary)_
+
+== Deploy
+
+[source,bash]
+----
+cd policies/acs-central
+oc apply -k .
+oc get central -n stackrox
+oc get secrets -n stackrox | grep tls
+----

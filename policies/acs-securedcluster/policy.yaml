@@ -1,0 +1,176 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  annotations:
+    policy.open-cluster-management.io/categories: Operators-Config
+    policy.open-cluster-management.io/controls: ACS-Operator
+    policy.open-cluster-management.io/standards: TofuOrg-Standards
+  name: policy-acs-securedcluster-secrets
+spec:
+  disabled: false
+  remediationAction: enforce
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-namespace
+        spec:
+          severity: high
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: stackrox
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-collector-secret
+        spec:
+          severity: low
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: collector-tls
+                  namespace: stackrox
+                  annotations:
+                    init-bundle.stackrox.io/id: ''
+                    init-bundle.stackrox.io/name: local-cluster
+                type: Opaque
+                data:
+                  ca.pem: |
+                    {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "ca.pem") hub}}
+                  collector-cert.pem: |
+                    {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "collector-cert.pem") hub}}
+                  collector-key.pem: |
+                    {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "collector-key.pem") hub}}
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-sensor-secret
+        spec:
+          severity: low
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: sensor-tls
+                  namespace: stackrox
+                  annotations:
+                    init-bundle.stackrox.io/id: ''
+                    init-bundle.stackrox.io/name: local-cluster
+                type: Opaque
+                data:
+                  ca.pem: |
+                    {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "ca.pem") hub}}
+                  sensor-cert.pem: |
+                    {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-cert.pem") hub}}
+                  sensor-key.pem: |
+                    {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-key.pem") hub}}
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-admission-control-secret
+        spec:
+          severity: low
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: admission-control-tls
+                  namespace: stackrox
+                  annotations:
+                    init-bundle.stackrox.io/id: ''
+                    init-bundle.stackrox.io/name: local-cluster
+                type: Opaque
+                data:
+                  ca.pem: |
+                    {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "ca.pem") hub}}
+                  admission-control-cert.pem: |
+                    {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "admission-control-cert.pem") hub}}
+                  admission-control-key.pem: |
+                    {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "admission-control-key.pem") hub}}
+
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  annotations:
+    policy.open-cluster-management.io/categories: Operators-Config
+    policy.open-cluster-management.io/controls: ACS-Operator
+    policy.open-cluster-management.io/standards: TofuOrg-Standards
+  name: policy-acs-securedcluster
+spec:
+  disabled: false
+  remediationAction: enforce 
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-acs-securedcluster
+        spec:
+          severity: high
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: platform.stackrox.io/v1alpha1
+                kind: SecuredCluster
+                metadata:
+                  name: '{{hub .ManagedClusterName hub}}'
+                  namespace: stackrox # stackrox
+                  annotations:
+                    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+                    argocd.argoproj.io/sync-wave: "3"
+                    centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+                    clusterName: '{{hub .ManagedClusterName hub}}'
+                  finalizers:
+                    - uninstall-helm-release
+                spec:
+                  admissionControl:
+                    bypass: BreakGlassAnnotation
+                    contactImageScanners: DoNotScanInline
+                    listenOnCreates: true
+                    listenOnEvents: true
+                    listenOnUpdates: true
+                    timeoutSeconds: 3
+                  auditLogs:
+                    collection: Auto
+                  centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+                  clusterName: '{{hub .ManagedClusterName hub}}'
+                  perNode:
+                    collector:
+                      collection: KernelModule
+                      imageFlavor: Regular
+                    taintToleration: TolerateTaints
+                  scanner:
+                    analyzer:
+                      scaling:
+                        autoScaling: Enabled
+                        maxReplicas: 5
+                        minReplicas: 2
+                        replicas: 3
+                    scannerComponent: AutoSense

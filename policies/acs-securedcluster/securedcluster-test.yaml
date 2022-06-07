@@ -1,0 +1,80 @@
+apiVersion: v1
+items:
+- apiVersion: platform.stackrox.io/v1alpha1
+  kind: SecuredCluster
+  metadata:
+    annotations:
+      argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+      argocd.argoproj.io/sync-wave: "3"
+      centralEndpoint: central-stackrox.apps.hub.lab.bewley.net:443
+      clusterName: local-cluster
+    creationTimestamp: "2022-06-06T15:38:54Z"
+    finalizers:
+    - uninstall-helm-release
+    generation: 1
+    name: local-cluster
+    namespace: dale
+    resourceVersion: "341547271"
+    uid: 6e7d0b52-4195-4442-863c-d4cc6f828fdf
+  spec:
+    admissionControl:
+      bypass: BreakGlassAnnotation
+      contactImageScanners: DoNotScanInline
+      listenOnCreates: true
+      listenOnEvents: true
+      listenOnUpdates: true
+      timeoutSeconds: 3
+    auditLogs:
+      collection: Auto
+    centralEndpoint: central-stackrox.apps.hub.lab.bewley.net:443
+    clusterName: local-cluster-test
+    perNode:
+      collector:
+        collection: KernelModule
+        imageFlavor: Regular
+      taintToleration: TolerateTaints
+    scanner:
+      analyzer:
+        scaling:
+          autoScaling: Enabled
+          maxReplicas: 5
+          minReplicas: 2
+          replicas: 3
+      scannerComponent: AutoSense
+  status:
+    clusterName: local-cluster-test
+    conditions:
+    - lastTransitionTime: "2022-06-06T15:38:54Z"
+      status: "False"
+      type: Deployed
+    - lastTransitionTime: "2022-06-06T15:38:54Z"
+      status: "True"
+      type: Initialized
+    - lastTransitionTime: "2022-06-06T15:38:54Z"
+      message: "3 errors occurred:\n\t* init-bundle secret \"sensor-tls\" does not
+        exist in namespace \"dale\", please make sure you have downloaded init-bundle
+        secrets (from UI or with roxctl) and created corresponding resources in the
+        correct namespace: Secret \"sensor-tls\" not found\n\t* init-bundle secret
+        \"admission-control-tls\" does not exist in namespace \"dale\", please make
+        sure you have downloaded init-bundle secrets (from UI or with roxctl) and
+        created corresponding resources in the correct namespace: Secret \"admission-control-tls\"
+        not found\n\t* init-bundle secret \"collector-tls\" does not exist in namespace
+        \"dale\", please make sure you have downloaded init-bundle secrets (from UI
+        or with roxctl) and created corresponding resources in the correct namespace:
+        Secret \"collector-tls\" not found\n\n"
+      reason: ErrorGettingValues
+      status: "True"
+      type: Irreconcilable
+    - lastTransitionTime: "2022-06-06T15:38:54Z"
+      message: No proxy configuration is desired
+      reason: NoProxyConfig
+      status: "False"
+      type: ProxyConfigFailed
+    - lastTransitionTime: "2022-06-06T15:38:54Z"
+      status: Unknown
+      type: ReleaseFailed
+    productVersion: 3.70.0
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

@@ -1,0 +1,12 @@
+# App Demo ACM Policies
+
+Creates an application 'demo-acm-policies' for deployment of the link:../../policies[policies] found at the top of this repo.
+
+When changes are made to link:../../policies[policies], this application may be manually synchronized to update the Governance policies. Alternatively the sync will take place periodically.
+
+## Deploy
+
+[source,bash]
+cd apps/demo-acm-policies
+oc apply -k .
+oc get subscriptions -n demo-acm-policies

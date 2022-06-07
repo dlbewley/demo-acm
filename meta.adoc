@@ -1,0 +1,7 @@
+:toc:
+:toclevels: 5
+:icons: font
+:sectanchors:
+:sectlinks:
+:source-highlighter: rouge
+:toc: []

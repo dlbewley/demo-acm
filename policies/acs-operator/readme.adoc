@@ -1,0 +1,25 @@
+= Policy ACS-Operator
+
+== Description
+
+Ensure that the RHACS Operator is installed.
+
+This work is derivative of Simon Delord's <https://github.com/SimonDelord/ACM-Templates/tree/master/resources12>
+
+.Effect
+* Install RHACM Operator
+
+.Remediation
+* Enforce
+
+.Scope
+* vendor=OpenShift
+
+== Deploy
+
+[source,bash]
+----
+cd policies/acs-operator
+oc apply -k .
+oc get csv -n rhacs-operator
+----
