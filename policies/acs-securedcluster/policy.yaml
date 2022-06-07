@@ -50,11 +50,11 @@ spec:
                 type: Opaque
                 data:
                   ca.pem: |
-                    {{hub fromSecret "stackrox" "collector-tls" "ca.pem" hub}}
+                    {{hub lookup "v1" "Secret" "stackrox" "collector-tls" "ca.pem" hub}}
                   collector-cert.pem: |
-                    {{hub fromSecret "stackrox" "collector-tls" "collector-cert.pem" hub}}
+                    {{hub lookup "v1" "Secret" "stackrox" "collector-tls" "collector-cert.pem" hub}}
                   collector-key.pem: |
-                    {{hub fromSecret "stackrox" "collector-tls" "collector-key.pem" hub}}
+                    {{hub lookup "v1" "Secret" "stackrox" "collector-tls" "collector-key.pem" hub}}
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
@@ -78,11 +78,11 @@ spec:
                 type: Opaque
                 data:
                   ca.pem: |
-                    {{hub fromSecret "stackrox" "sensor-tls" "ca.pem" hub}}
+                    {{hub lookup "v1" "Secret" "stackrox" "sensor-tls" "ca.pem" hub}}
                   sensor-cert.pem: |
-                    {{hub fromSecret "stackrox" "sensor-tls" "sensor-cert.pem" hub}}
+                    {{hub lookup "v1" "Secret" "stackrox" "sensor-tls" "sensor-cert.pem" hub}}
                   sensor-key.pem: |
-                    {{hub fromSecret "stackrox" "sensor-tls" "sensor-key.pem" hub}}
+                    {{hub lookup "v1" "Secret" "stackrox" "sensor-tls" "sensor-key.pem" hub}}
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
@@ -106,11 +106,11 @@ spec:
                 type: Opaque
                 data:
                   ca.pem: |
-                    {{hub fromSecret "stackrox" "admission-control-tls" "ca.pem" hub}}
+                    {{hub lookup "v1" "Secret" "stackrox" "admission-control-tls" "ca.pem" hub}}
                   admission-control-cert.pem: |
-                    {{hub fromSecret "stackrox" "admission-control-tls" "admission-control-cert.pem" hub}}
+                    {{hub lookup "v1" "Secret" "stackrox" "admission-control-tls" "admission-control-cert.pem" hub}}
                   admission-control-key.pem: |
-                    {{hub fromSecret "stackrox" "admission-control-tls" "admission-control-key.pem" hub}}
+                    {{hub lookup "v1" "Secret" "stackrox" "admission-control-tls" "admission-control-key.pem" hub}}
 
 ---
 apiVersion: policy.open-cluster-management.io/v1
