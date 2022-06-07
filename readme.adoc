@@ -15,6 +15,26 @@ About this demo
 [TIP]
 I use `kustomize build foo | oc apply -f -`, but you may wish to use `oc apply -k foo`.
 
+* Build a largish cluster
+* Log in to it
+
+=== Deploy ACM Hub
+
+* Deploy ACM operator and MulticlusterHub resource.
+
+[source,bash]
+----
+kustomize build hub | oc apply -f -
+# first time will produce error below, so run twice:
+# unable to recognize "STDIN": no matches for kind "MultiClusterHub" in version "operator.open-cluster-management.io/v1"
+kustomize build hub | oc apply -f -
+----
+
+.Observability OBC TODO
+[WARNING]
+unable to recognize "STDIN": no matches for kind "DiscoveryConfig" in version "discovery.open-cluster-management.io/v1alpha1"
+unable to recognize "STDIN": no matches for kind "ObjectBucketClaim" in version "objectbucket.io/v1alpha1"
+
 === Configure Credentials Secrets
 
 * Update the values found in example secrets with your credentials.
@@ -58,6 +78,7 @@ $ kustomize build credentials/vsphere   | oc apply -f -
 === Deploy Clusters
 
 * Deploy cluster to desired cloud.
+
 [source,bash]
 ----
 $ kustomize build clusters/aws-demo     | oc apply -f -
@@ -75,6 +96,15 @@ Use script link:bin/mkeks[bin/mkeks] to deploy an EKS cluster.
 ----
 $ kustomize build clusterpools/aws-pool   | oc apply -f -
 $ kustomize build clusterpools/azure-pool | oc apply -f -
+----
+
+==== Deploy Policies
+
+Deploy example policies[policies].
+
+[source,bash]
+----
+$ kustomize build apps/demo-acm-policies | oc apply -f -
 ----
 
 == Demonstration
