@@ -5,7 +5,6 @@ metadata:
   labels:
     app: acs
   name: placement-policy-acs-securedcluster
-  namespace: null
 spec:
   clusterConditions:
   - status: "True"
@@ -23,8 +22,7 @@ kind: PlacementRule
 metadata:
   labels:
     app: acs
-  name: placement-policy-acs-securedcluster-secret
-  namespace: null
+  name: placement-policy-acs-securedcluster-secrets
 spec:
   clusterConditions:
   - status: "True"

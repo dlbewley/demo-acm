@@ -23,7 +23,7 @@ metadata:
 placementRef:
   apiGroup: apps.open-cluster-management.io
   kind: PlacementRule
-  name: placement-policy-acs-securedcluster-secret
+  name: placement-policy-acs-securedcluster-secrets
 
 subjects:
   - apiGroup: policy.open-cluster-management.io
