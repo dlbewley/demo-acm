@@ -42,7 +42,7 @@ spec:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: collector-tls-test
+                  name: collector-tls
                   namespace: stackrox
                   annotations:
                     init-bundle.stackrox.io/id: ''
@@ -70,7 +70,7 @@ spec:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: sensor-tls-test
+                  name: sensor-tls
                   namespace: stackrox
                   annotations:
                     init-bundle.stackrox.io/id: ''
@@ -98,7 +98,7 @@ spec:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: admission-control-tls-test
+                  name: admission-control-tls
                   namespace: stackrox
                   annotations:
                     init-bundle.stackrox.io/id: ''
@@ -160,7 +160,7 @@ spec:
                   auditLogs:
                     collection: Auto
                   centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
-                  clusterName: '{{hub .ManagedClusterName hub}}-test'
+                  clusterName: '{{hub .ManagedClusterName hub}}'
                   perNode:
                     collector:
                       collection: KernelModule
