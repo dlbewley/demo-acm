@@ -13,13 +13,13 @@ This work is derivative of Simon Delord's <https://github.com/SimonDelord/ACM-Te
 * Enforce
 
 .Scope
-* environment=infra
+* vendor=OpenShift
 
 == Deploy
 
 [source,bash]
 ----
-cd ~/demo-acm/policies/acs-operator
+cd policies/acs-operator
 oc apply -k .
 oc get csv -n rhacs-operator
 ----

@@ -7,7 +7,7 @@ Ensure that cluster is secured by ACS.
 See also <https://github.com/stolostron/policy-collection/tree/main/policygenerator/policy-sets/community/openshift-plus>
 
 .Effect
-* Create SecuredCluster resource with proper endpoint and TLS secretes from Stackrox cluster init bundle.
+* Create SecuredCluster resource on managed clusters with proper endpoint and TLS secrets from Stackrox cluster init bundle on hub cluster.
 
 .Remediation
 * Enforce
@@ -19,7 +19,7 @@ See also <https://github.com/stolostron/policy-collection/tree/main/policygenera
 
 [source,bash]
 ----
-cd ~/demo-acm/policies/acs-securedcluster
+cd policies/acs-securedcluster
 oc apply -k .
 oc get securedcluster -n stackrox
 ----
