@@ -3,13 +3,18 @@ include::../meta.adoc[]
 
 = Demo Policies
 
-These are policies that my ficticious company "TofuOrg" wants to ensure are applied consistently to our OpenShift Kubernetes environments.
+These are policies that ficticious company "TofuOrg" wants to ensure are applied consistently to our OpenShift Kubernetes environments.
 
 These policies have an annotation `policy.open-cluster-management.io/standards: TofuOrg-Standards` to group them in the ACM console.
+
+.Simplify Resource to Policy Generation
+[TIP]
+The https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html/governance/governance#policy-generator[policy generator] plugin for Kustomize may be used to build configuration management policies from Kubernetes manifests.
 
 .Be sure to see more example policies
 * <https://github.com/stolostron/policy-collection>
 * <https://github.com/SimonDelord/ACM-Templates/tree/master/resources12>
+
 
 == Deploy
 
