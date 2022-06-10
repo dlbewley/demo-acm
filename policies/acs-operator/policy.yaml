@@ -9,7 +9,7 @@ metadata:
   name: policy-acs-operator
 spec:
   disabled: false
-  remediationAction: enforce # overrides remediationAction in policy-templates
+  remediationAction: inform # overrides remediationAction in policy-templates
   policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
@@ -26,6 +26,7 @@ spec:
                 kind: Namespace
                 metadata:
                   name: rhacs-operator
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -43,6 +44,7 @@ spec:
                   name: acs-operator
                   namespace: rhacs-operator
                 spec: {}
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
