@@ -10,7 +10,7 @@ metadata:
   namespace: open-cluster-management-policies
 spec:
   disabled: false
-  remediationAction: inform
+  remediationAction: enforce
   policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
