@@ -9,7 +9,7 @@ metadata:
   name: policy-acs-operator
 spec:
   disabled: false
-  remediationAction: inform # overrides remediationAction in policy-templates
+  remediationAction: enforce # overrides remediationAction in policy-templates
   policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
