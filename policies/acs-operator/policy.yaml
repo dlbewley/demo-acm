@@ -40,7 +40,7 @@ spec:
                 apiVersion: operators.coreos.com/v1
                 kind: OperatorGroup
                 metadata:
-                  name: acs-operator
+                  name: rhacs-operator
                   namespace: rhacs-operator
                 spec: {}
     - objectDefinition:
