@@ -1,0 +1,12 @@
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  labels:
+    cloud: VSpehere
+    name: snoball-lab-bewley-net
+    vendor: OpenShift
+    location: cloud
+    usage: development
+  name: snoball-lab-bewley-net
+spec:
+  hubAcceptsClient: true

@@ -1,0 +1,36 @@
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: snoball-lab-bewley-net
+  labels:
+    cloud: vSphere
+    vendor: OpenShift
+    customer: Bewley.net
+    cluster.open-cluster-management.io/clusterset: dev-cs
+spec:
+  baseDomain: lab.bewley.net
+  clusterName: 'snoball'
+  controlPlaneConfig:
+    servingCertificates: {}
+  installAttemptsLimit: 2
+  installed: false
+  platform:
+    vsphere:
+      credentialsSecretRef:
+        name: vsphere-creds
+      certificatesSecretRef:
+        name: vsphere-certs
+      cluster: Goat
+      datacenter: Garden
+      defaultDatastore: VMData-HD
+      vCenter: vcenter.lab.bewley.net
+      network: lab-192-168-4-0-b24
+  provisioning:
+    installConfigSecretRef:
+      name: install-config
+    sshPrivateKeySecretRef:
+      name: ssh-private-key
+    imageSetRef:
+      name: img4.10.22-x86-64-appsub
+  pullSecretRef:
+    name: pull-secret
