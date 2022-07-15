@@ -21,8 +21,8 @@ compute:
     replicas: 0
 platform:
   vsphere:
-    apiVIP: 192.168.4.15
-    ingressVIP: 192.168.4.14
+    apiVIP: 192.168.4.11
+    ingressVIP: 192.168.4.10
     network: lab-192-168-4-0-b24
     datacenter: Garden
     cluster: Goat
