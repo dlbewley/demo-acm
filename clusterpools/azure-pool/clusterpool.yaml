@@ -4,7 +4,7 @@ kind: ClusterPool
 metadata:
   name: azure-pool
   labels:
-    cluster.open-cluster-management.io/clusterset: edge
+    cluster.open-cluster-management.io/clusterset: qa-cs
     cloud: Azure
     region: westus
     vendor: OpenShift
@@ -12,7 +12,7 @@ metadata:
 spec:
   baseDomain: az.tofu.org
   imageSetRef:
-    name: img4.10.5-x86-64-appsub
+    name: img4.10.22-x86-64-appsub
   # do not create worker machinepool
   skipMachinePools: true
   installConfigSecretTemplateRef:
