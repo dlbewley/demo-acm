@@ -14,7 +14,7 @@ fi
 CLUSTER_NAME=${1:-eks-tofu}
 EKS_VERSION=${2:-1.21}
 
-echo eksctl create cluster \
+eksctl create cluster \
         --name ${CLUSTER_NAME} \
         --version ${EKS_VERSION} \
         --region us-west-2 \
@@ -28,3 +28,4 @@ echo eksctl create cluster \
         --managed
 
 # eksctl utils describe-stacks --region=us-west-2 --cluster=$CLUSTER_NAME
+# eksctl delete cluster --name=eks-tofu
