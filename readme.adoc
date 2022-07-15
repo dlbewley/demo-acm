@@ -55,7 +55,7 @@ $ find . -name secrets -o -name certs
 
 [source,bash]
 ----
-$ cd kustomize/oauth/secrets
+$ cd kustomize/oauth
 $ make
 ----
 
