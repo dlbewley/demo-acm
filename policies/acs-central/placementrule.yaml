@@ -14,8 +14,3 @@ spec:
       operator: In
       values:
       - "true"
-    # temporary protection for my lab hub
-    - key: cloud
-      operator: In
-      values:
-      - "Amazon"
