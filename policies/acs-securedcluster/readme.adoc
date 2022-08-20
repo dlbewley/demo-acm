@@ -15,6 +15,16 @@ See also <https://github.com/stolostron/policy-collection/tree/main/policygenera
 .Scope
 * vendor=OpenShift
 
+== Requirements
+
+Cluster init-bundle generated and resulting secrets stored in stackrox namespace:
+
+* admission-control-tls
+* collector-tls
+* sensor-tls
+
+You must generate the cluster init-bundle using the ACS Central web console and apply the results. See also: https://github.com/redhat-cop/gitops-catalog/blob/main/advanced-cluster-security-operator/instance/base/create-cluster-init-bundle-job.yaml
+
 == Deploy
 
 [source,bash]
