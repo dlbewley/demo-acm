@@ -13,7 +13,7 @@ About this demo
 
 .**YMMV**
 [TIP]
-I use `kustomize build foo | oc apply -f -`, but you may wish to use `oc apply -k foo`.
+In place of `kustomize build foo | oc apply -f -` you may use `oc apply -k foo`.
 
 * Build a largish cluster
 * Log in to it
@@ -43,13 +43,16 @@ unable to recognize "STDIN": no matches for kind "ObjectBucketClaim" in version 
 $ find . -name secrets -o -name certs
 ./credentials/vsphere/secrets
 ./credentials/vsphere/certs
+./credentials/pull-secret/secrets
 ./credentials/azure/secrets
+./credentials/ssh-keys/secrets
 ./credentials/aws/secrets
 ./credentials/ocm/secrets
 ./credentials/base/secrets
 ./credentials/base/certs
 ./kustomize/oauth/secrets
 ./kustomize/observability/secrets # defer edits
+
 
 * Generate random passwords and an htpasswd from the values found in link:kustomize/oauth/secrets/[kustomize/oauth/secrets/]
 
@@ -66,14 +69,24 @@ $ vi clusters/vsphere-demo/install-config.yaml
 
 === Create Credentials for Cloud Providers
 
+* Create credential secrets in open-cluster-management namespace.
+
 [source,bash]
 ----
-# kustomize build credentials/hub       | oc apply -f -
-$ kustomize build credentials/aws       | oc apply -f -
-$ kustomize build credentials/azure     | oc apply -f -
-$ kustomize build credentials/ocm       | oc apply -f -
-$ kustomize build credentials/vsphere   | oc apply -f -
+$ oc apply -k credentials/hub
 ----
+
+.The following secrets are created.
+[source,bash]
+$ kustomize build credentials/hub | kfilt -k secret | grep ' name:'
+  name: aws-creds
+  name: azure-creds
+  name: ocm-creds
+  name: pull-secret
+  name: ssh-private-key
+  name: ssh-public-key
+  name: vsphere-certs
+  name: vsphere-creds
 
 === Deploy Clusters
 
