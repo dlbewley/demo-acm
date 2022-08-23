@@ -90,7 +90,7 @@ $ kustomize build credentials/hub | kfilt -k secret | grep ' name:'
 
 === Deploy Clusters
 
-* Deploy cluster to desired cloud.
+* Deploy link:clusters/[clusters] to the desired clouds.
 
 [source,bash]
 ----
@@ -105,6 +105,8 @@ Use script link:bin/mkeks[bin/mkeks] to deploy an EKS cluster.
 
 === Deploy ClusterPools
 
+* Deploy link:clusterpools/[clusterpools] to the desired clouds.
+
 [source,bash]
 ----
 $ kustomize build clusterpools/aws-pool   | oc apply -f -
@@ -113,7 +115,7 @@ $ kustomize build clusterpools/azure-pool | oc apply -f -
 
 ==== Deploy Policies
 
-Deploy example policies[policies].
+* Deploy example Open Cluster Management link:policies/[policies].
 
 [source,bash]
 ----
