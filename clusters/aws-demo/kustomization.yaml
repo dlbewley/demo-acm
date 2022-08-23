@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: demo-aws-tofu-org
 
 bases:
+  - ../../credentials/base
   - ../../credentials/aws
-  # - ../../kustomize/oauth
 
 generatorOptions:
   disableNameSuffixHash: true

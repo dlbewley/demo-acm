@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: demo-az-tofu-org
 
 bases:
+  - ../../credentials/base
   - ../../credentials/azure
-  # - ../../kustomize/oauth
 
 generatorOptions:
   disableNameSuffixHash: true

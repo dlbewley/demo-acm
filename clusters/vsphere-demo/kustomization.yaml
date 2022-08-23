@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: demo-lab-bewley-net
 
 bases:
+  - ../../credentials/base
   - ../../credentials/vsphere
-  # - ../../kustomize/oauth
 
 generatorOptions:
   disableNameSuffixHash: true
