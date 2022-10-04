@@ -22,7 +22,6 @@ Ensures that a cluster is configured to host ACS Central services
 
 .Scope
 * local-cluster=true
-* cloud=Amazon _(temporary)_
 
 == Deploy
 
