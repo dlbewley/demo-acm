@@ -1,0 +1,175 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  annotations:
+    policy.open-cluster-management.io/categories: Operators-Config
+    policy.open-cluster-management.io/controls: ACS-Operator
+    policy.open-cluster-management.io/standards: TofuOrg-Standards
+  name: policy-acs-securedcluster-helm
+spec:
+  disabled: false
+  remediationAction: enforce
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-namespace-charts
+        spec:
+          severity: high
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: rhacs-charts-ns
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-securedcluster-helm-placementrule
+        spec:
+          severity: high
+          remediationAction: enforce
+          object-templates:
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps.open-cluster-management.io/v1
+                kind: PlacementRule
+                metadata:
+                  labels:
+                    app: stackrox
+                  name: acs-securedcluster-helm
+                  namespace: stackrox
+                spec:
+                  clusterSelector:
+                    matchLabels:
+                      vendor: 'EKS'
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-securedcluster-helm-application
+        spec:
+          severity: high
+          remediationAction: enforce
+          object-templates:
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: app.k8s.io/v1beta1
+                kind: Application
+                metadata:
+                  name: rhacs-securedcluster-helm
+                  namespace: stackrox
+                spec:
+                  componentKinds:
+                  - group: apps.open-cluster-management.io
+                    kind: Subscription
+                  descriptor: {}
+                  selector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - stackrox-secured-cluster
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-securedcluster-helm-channel
+        spec:
+          severity: high
+          remediationAction: enforce
+          object-templates:
+
+            # Channel
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps.open-cluster-management.io/v1
+                kind: Channel
+                metadata:
+                  annotations:
+                    apps.open-cluster-management.io/reconcile-rate: low
+                  name: rhacs-charts
+                  namespace: rhacs-charts-ns
+                spec:
+                  type: HelmRepo
+                  pathname: 'https://mirror.openshift.com/pub/rhacs/charts/'
+
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  annotations:
+    policy.open-cluster-management.io/categories: Operators-Config
+    policy.open-cluster-management.io/controls: ACS-Operator
+    policy.open-cluster-management.io/standards: TofuOrg-Standards
+  name: policy-acs-securedcluster-helm-sub
+spec:
+  disabled: false
+  remediationAction: enforce
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-securedcluster-helm-subscription
+        spec:
+          severity: high
+          remediationAction: enforce
+          object-templates:
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps.open-cluster-management.io/v1
+                kind: Subscription
+                metadata:
+                  annotations:
+                  labels:
+                    app: stackrox-secured-cluster
+                  name: stackrox-secured-cluster
+                  namespace: stackrox
+                spec:
+                  channel: rhacs-charts-ns/rhacs-charts
+                  name: stackrox
+                  packageOverrides:
+                  - packageName: stackrox-secured-cluster-services
+                    packageAlias: stackrox-secured-cluster-services
+                    packageOverrides:
+                    - path: spec
+                      value:
+                        admissionControl:
+                          serviceTLS:
+                            cert: |
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "admission-control-cert.pem") hub}}
+                            key: |
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "admission-control-key.pem") hub}}
+                        ca:
+                          cert: |
+                            {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "ca.pem") hub}}
+                        collector:
+                          serviceTLS:
+                            cert: |
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "collector-cert.pem") hub}}
+                            key: |
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "collector-key.pem") hub}}
+                        sensor:
+                          serviceTLS:
+                            cert: |
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-cert.pem") hub}}
+                            key: |
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-key.pem") hub}}
+                  placement:
+                    placementRef:
+                      kind: PlacementRule
+                      name: acs-securedcluster-helm

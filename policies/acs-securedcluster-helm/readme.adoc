@@ -1,0 +1,37 @@
+= Policy ACS-SecuredCluster-Helm
+
+== Description
+
+Ensure that cluster is secured by ACS.
+Installs Helm chart rather than Operator subscription.
+
+See also <https://github.com/stolostron/policy-collection/tree/main/policygenerator/policy-sets/community/openshift-plus>
+
+.Effect
+* Create a Channel on Hub for RHACS Helm charts 'https://mirror.openshift.com/pub/rhacs/charts/'
+* Create a Subscription to install stackrox-secured-cluster-services Helm chart on managed cluster.
+* Override Helm chart values with RHACS init bundle values.
+
+.Remediation
+* Enforce
+
+.Scope
+* vendor=EKS
+
+== Requirements
+
+Cluster init-bundle generated and resulting secrets stored in stackrox namespace:
+
+* admission-control-tls
+* collector-tls
+* sensor-tls
+
+You must generate the cluster init-bundle using the ACS Central web console and apply the results. See also: https://github.com/redhat-cop/gitops-catalog/blob/main/advanced-cluster-security-operator/instance/base/create-cluster-init-bundle-job.yaml
+
+== Deploy
+
+[source,bash]
+----
+cd policies/acs-securedcluster-helm
+oc apply -k .
+----
