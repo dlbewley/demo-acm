@@ -6,7 +6,7 @@ metadata:
     policy.open-cluster-management.io/categories: Operators-Config
     policy.open-cluster-management.io/controls: ACS-Operator
     policy.open-cluster-management.io/standards: TofuOrg-Standards
-  name: policy-acs-securedcluster-secrets
+  name: policy-acs-securedcluster-namespace
 spec:
   disabled: false
   remediationAction: enforce
@@ -27,6 +27,20 @@ spec:
                 kind: Namespace
                 metadata:
                   name: stackrox
+
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  annotations:
+    policy.open-cluster-management.io/categories: Operators-Config
+    policy.open-cluster-management.io/controls: ACS-Operator
+    policy.open-cluster-management.io/standards: TofuOrg-Standards
+  name: policy-acs-securedcluster-secrets
+spec:
+  disabled: false
+  remediationAction: enforce
+  policy-templates:
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1

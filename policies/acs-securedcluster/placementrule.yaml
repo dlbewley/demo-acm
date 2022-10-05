@@ -15,6 +15,7 @@ spec:
       operator: In
       values:
       - "OpenShift"
+      - "EKS"
 
 ---
 apiVersion: apps.open-cluster-management.io/v1
