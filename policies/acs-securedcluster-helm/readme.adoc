@@ -5,7 +5,10 @@
 Ensure that cluster is secured by ACS.
 Installs Helm chart rather than Operator subscription.
 
-See also <https://github.com/stolostron/policy-collection/tree/main/policygenerator/policy-sets/community/openshift-plus>
+
+.See also
+* <https://docs.openshift.com/acs/3.72/installing/installing_helm/install-helm-customization.html>
+* <https://github.com/stolostron/policy-collection/tree/main/policygenerator/policy-sets/community/openshift-plus>
 
 .Effect
 * Create a Channel on Hub for RHACS Helm charts 'https://mirror.openshift.com/pub/rhacs/charts/'
@@ -17,6 +20,8 @@ See also <https://github.com/stolostron/policy-collection/tree/main/policygenera
 
 .Scope
 * vendor=EKS
+
+Target is any platform that does lacks Operator Lifecycle Management.
 
 == Requirements
 
@@ -36,19 +41,33 @@ cd policies/acs-securedcluster-helm
 oc apply -k .
 ----
 
-= Bugs
+= Bugs and Known Issues
 
-The helm release is installed with a randomize name which changes if the subscription is recreated. This non-default name is blocked by the chart and prevents installation.
+== Helm Release Name
+
+The default release name 'stackrox-secured-cluster-services' is 34 characters. When installed by ACM that name will be truncated and get a random suffix to get the length to 32 characters.
+
+This non-default name is blocked by the chart and prevents installation.
 
 [source,]
 FATAL ERROR:
 You have chosen a release name of 'stackrox-secured-cluster--2c11b', not
 'stackrox-secured-cluster-services'. We strongly recommend using the standard release name. If you
 
-The workaround for the moment is to set `allowNonstandardReleaseName: true` in packageOverrides. But what is the fix?
+**Workaround**
+
+The workaround for the moment is to set the `spec.packageOverrides.packageAlias` to a name at 32 characters or less (.i.e. _stackrox-secured-cluster-svcs_), and set `allowNonstandardReleaseName: true` in the packageOverrides, so the Chart will accept it.
 
 [source,]
 managed-cluster$ helm list -A
 NAME                            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                           APP VERSION
 apache                          helloworld-helm 1               2022-10-06 19:47:52.524616989 +0000 UTC deployed        apache-9.2.4                                    2.4.54
 stackrox-secured-cluster--2c11b stackrox        1               2022-10-06 22:12:56.758330486 +0000 UTC deployed        stackrox-secured-cluster-services-72.0.0        3.72.0
+
+== Pull Secret
+
+Need to replicate pull secret to enable pulls from registry.redhat.io/advanced-cluster-security
+
+== SecuredCluster Resource
+
+Not yet verified because platform.stackrox.io API not yet stood up by the imagepullbackoff affected pods.

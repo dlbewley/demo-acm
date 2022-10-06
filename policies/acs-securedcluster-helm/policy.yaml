@@ -140,7 +140,7 @@ spec:
                   name: stackrox-secured-cluster-services
                   packageOverrides:
                   - packageName: stackrox-secured-cluster-services
-                    packageAlias: stackrox-secured-cluster-services
+                    packageAlias: stackrox-secured-cluster-svcs
                     packageOverrides:
                     - path: spec
                       value:
