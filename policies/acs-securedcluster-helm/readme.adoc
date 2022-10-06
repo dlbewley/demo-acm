@@ -38,9 +38,17 @@ oc apply -k .
 
 = Bugs
 
-Will not actully install on the managed cluster due to what looks to be a randomly generated release name at helm chart install time. Random suffix changes if subscription is recreated.
+The helm release is installed with a randomize name which changes if the subscription is recreated. This non-default name is blocked by the chart and prevents installation.
 
 [source,]
 FATAL ERROR:
 You have chosen a release name of 'stackrox-secured-cluster--2c11b', not
 'stackrox-secured-cluster-services'. We strongly recommend using the standard release name. If you
+
+The workaround for the moment is to set `allowNonstandardReleaseName: true` in packageOverrides. But what is the fix?
+
+[source,]
+managed-cluster$ helm list -A
+NAME                            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                           APP VERSION
+apache                          helloworld-helm 1               2022-10-06 19:47:52.524616989 +0000 UTC deployed        apache-9.2.4                                    2.4.54
+stackrox-secured-cluster--2c11b stackrox        1               2022-10-06 22:12:56.758330486 +0000 UTC deployed        stackrox-secured-cluster-services-72.0.0        3.72.0
