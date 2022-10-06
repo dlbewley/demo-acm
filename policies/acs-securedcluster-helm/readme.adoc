@@ -35,3 +35,12 @@ You must generate the cluster init-bundle using the ACS Central web console and 
 cd policies/acs-securedcluster-helm
 oc apply -k .
 ----
+
+= Bugs
+
+Will not actully install on the managed cluster due to what looks to be a randomly generated release name at helm chart install time. Random suffix changes if subscription is recreated.
+
+[source,]
+FATAL ERROR:
+You have chosen a release name of 'stackrox-secured-cluster--2c11b', not
+'stackrox-secured-cluster-services'. We strongly recommend using the standard release name. If you
