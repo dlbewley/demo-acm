@@ -75,11 +75,8 @@ spec:
                     kind: Subscription
                   descriptor: {}
                   selector:
-                    matchExpressions:
-                      - key: app
-                        operator: In
-                        values:
-                          - stackrox-secured-cluster
+                    matchLabels:
+                      app: stackrox-secured-cluster-services
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
@@ -91,19 +88,18 @@ spec:
           remediationAction: enforce
           object-templates:
 
-            # Channel
             - complianceType: musthave
               objectDefinition:
                 apiVersion: apps.open-cluster-management.io/v1
                 kind: Channel
                 metadata:
                   annotations:
-                    apps.open-cluster-management.io/reconcile-rate: low
+                    apps.open-cluster-management.io/reconcile-rate: medium
                   name: rhacs-charts
                   namespace: rhacs-charts-ns
                 spec:
                   type: HelmRepo
-                  pathname: 'https://mirror.openshift.com/pub/rhacs/charts/'
+                  pathname: 'https://mirror.openshift.com/pub/rhacs/charts'
 
 ---
 apiVersion: policy.open-cluster-management.io/v1
@@ -136,18 +132,21 @@ spec:
                 metadata:
                   annotations:
                   labels:
-                    app: stackrox-secured-cluster
-                  name: stackrox-secured-cluster
+                    app: stackrox-secured-cluster-services
+                  name: stackrox-secured-cluster-services
                   namespace: stackrox
                 spec:
                   channel: rhacs-charts-ns/rhacs-charts
-                  name: stackrox
+                  name: stackrox-secured-cluster-services
                   packageOverrides:
                   - packageName: stackrox-secured-cluster-services
                     packageAlias: stackrox-secured-cluster-services
                     packageOverrides:
                     - path: spec
                       value:
+                        allowNonstandardReleaseName: true
+                        centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+                        clusterName: '{{hub .ManagedClusterName hub}}'
                         admissionControl:
                           serviceTLS:
                             cert: |
