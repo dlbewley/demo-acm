@@ -61,8 +61,7 @@ The workaround for the moment is to set the `spec.packageOverrides.packageAlias`
 [source,]
 managed-cluster$ helm list -A
 NAME                            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                           APP VERSION
-apache                          helloworld-helm 1               2022-10-06 19:47:52.524616989 +0000 UTC deployed        apache-9.2.4                                    2.4.54
-stackrox-secured-cluster--2c11b stackrox        1               2022-10-06 22:12:56.758330486 +0000 UTC deployed        stackrox-secured-cluster-services-72.0.0        3.72.0
+stackrox-secured-cluster-svcs   stackrox        1               2022-10-06 23:42:55.423977249 +0000 UTC deployed        stackrox-secured-cluster-services-72.0.0        3.72.0
 
 == Pull Secret
 
