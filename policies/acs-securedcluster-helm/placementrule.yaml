@@ -15,3 +15,20 @@ spec:
       operator: In
       values:
       - "true"
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  labels:
+    app: acs
+  name: placement-policy-acs-securedcluster-helm-sub
+spec:
+  clusterConditions:
+  - status: "True"
+    type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+    - key: vendor
+      operator: In
+      values:
+      - EKS

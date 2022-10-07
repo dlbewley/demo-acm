@@ -101,20 +101,6 @@ spec:
                   type: HelmRepo
                   pathname: 'https://mirror.openshift.com/pub/rhacs/charts'
 
----
-apiVersion: policy.open-cluster-management.io/v1
-kind: Policy
-metadata:
-  annotations:
-    policy.open-cluster-management.io/categories: Operators-Config
-    policy.open-cluster-management.io/controls: ACS-Operator
-    policy.open-cluster-management.io/standards: TofuOrg-Standards
-  name: policy-acs-securedcluster-helm-sub
-spec:
-  disabled: false
-  remediationAction: enforce
-  policy-templates:
-
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -168,7 +154,44 @@ spec:
                               {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-cert.pem") hub}}
                             key: |
                               {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-key.pem") hub}}
+                        imagePullSecrets:
+                          useExisting: open-cluster-management-image-pull-credentials
                   placement:
                     placementRef:
                       kind: PlacementRule
                       name: acs-securedcluster-helm
+
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  annotations:
+    policy.open-cluster-management.io/categories: Operators-Config
+    policy.open-cluster-management.io/controls: ACS-Operator
+    policy.open-cluster-management.io/standards: TofuOrg-Standards
+  name: policy-acs-securedcluster-helm-sub
+spec:
+  disabled: false
+  remediationAction: enforce
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-securedcluster-pullsecret
+        spec:
+          severity: low
+          remediationAction: enforce
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: open-cluster-management-image-pull-credentials
+                  namespace: stackrox
+                type: kubernetes.io/dockerconfigjson
+                data:
+                  .dockerconfigjson: |
+                    {{(index (lookup "v1" "Secret" "open-cluster-management-agent" "open-cluster-management-image-pull-credentials").data ".dockerconfigjson") }}

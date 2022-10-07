@@ -23,7 +23,7 @@ metadata:
 placementRef:
   apiGroup: apps.open-cluster-management.io
   kind: PlacementRule
-  name: placement-policy-acs-securedcluster-helm
+  name: placement-policy-acs-securedcluster-helm-sub
 
 subjects:
   - apiGroup: policy.open-cluster-management.io
