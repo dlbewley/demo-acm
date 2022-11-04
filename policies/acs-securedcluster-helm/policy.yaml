@@ -101,65 +101,7 @@ spec:
                   type: HelmRepo
                   pathname: 'https://mirror.openshift.com/pub/rhacs/charts'
 
-    - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: acs-securedcluster-helm-subscription
-        spec:
-          severity: high
-          remediationAction: enforce
-          object-templates:
 
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: apps.open-cluster-management.io/v1
-                kind: Subscription
-                metadata:
-                  annotations:
-                  labels:
-                    app: stackrox-secured-cluster-services
-                  name: stackrox-secured-cluster-services
-                  namespace: stackrox
-                spec:
-                  channel: rhacs-charts-ns/rhacs-charts
-                  name: stackrox-secured-cluster-services
-                  packageOverrides:
-                  - packageName: stackrox-secured-cluster-services
-                    packageAlias: stackrox-secured-cluster-svcs
-                    packageOverrides:
-                    - path: spec
-                      value:
-                        allowNonstandardReleaseName: true
-                        centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
-                        clusterName: '{{hub .ManagedClusterName hub}}'
-                        admissionControl:
-                          serviceTLS:
-                            cert: |
-                              {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "admission-control-cert.pem") hub}}
-                            key: |
-                              {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "admission-control-key.pem") hub}}
-                        ca:
-                          cert: |
-                            {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "ca.pem") hub}}
-                        collector:
-                          serviceTLS:
-                            cert: |
-                              {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "collector-cert.pem") hub}}
-                            key: |
-                              {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "collector-key.pem") hub}}
-                        sensor:
-                          serviceTLS:
-                            cert: |
-                              {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-cert.pem") hub}}
-                            key: |
-                              {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-key.pem") hub}}
-                        imagePullSecrets:
-                          useExisting: open-cluster-management-image-pull-credentials
-                  placement:
-                    placementRef:
-                      kind: PlacementRule
-                      name: acs-securedcluster-helm
 
 ---
 apiVersion: policy.open-cluster-management.io/v1
@@ -195,3 +137,63 @@ spec:
                 data:
                   .dockerconfigjson: |
                     {{(index (lookup "v1" "Secret" "open-cluster-management-agent" "open-cluster-management-image-pull-credentials").data ".dockerconfigjson") }}
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: acs-securedcluster-helm-subscription
+        spec:
+          severity: high
+          remediationAction: enforce
+          object-templates:
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps.open-cluster-management.io/v1
+                kind: Subscription
+                metadata:
+                  annotations:
+                  labels:
+                    app: stackrox-secured-cluster-services
+                  name: stackrox-secured-cluster-services
+                  namespace: stackrox
+                spec:
+                  channel: rhacs-charts-ns/rhacs-charts
+                  name: stackrox-secured-cluster-services
+                  packageOverrides:
+                  - packageName: stackrox-secured-cluster-services
+                    packageAlias: stackrox-secured-cluster-svcs
+                    packageOverrides:
+                    - path: spec
+                      value:
+                        allowNonstandardReleaseName: true
+                        centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+                        clusterName: '{{hub .ManagedClusterName hub}}'
+                        admissionControl:
+                          serviceTLS:
+                            cert: >+
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "admission-control-cert.pem") | base64dec | autoindent hub}}
+                            key: >+
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "admission-control-key.pem") | base64dec | autoindent hub}}
+                        ca:
+                          cert: >+
+                            {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "ca.pem") | base64dec | autoindent hub}}
+                        collector:
+                          serviceTLS:
+                            cert: >+
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "collector-cert.pem") | base64dec | autoindent hub}}
+                            key: >+
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "collector-key.pem") | base64dec | autoindent hub}}
+                        sensor:
+                          serviceTLS:
+                            cert: >+
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-cert.pem") | base64dec | autoindent hub}}
+                            key: >+
+                              {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-key.pem") | base64dec | autoindent hub}}
+                        imagePullSecrets:
+                          useExisting: open-cluster-management-image-pull-credentials
+                  placement:
+                    placementRef:
+                      kind: PlacementRule
+                      name: acs-securedcluster-helm
