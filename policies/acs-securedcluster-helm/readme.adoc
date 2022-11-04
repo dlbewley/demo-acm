@@ -63,17 +63,31 @@ managed-cluster$ helm list -A
 NAME                            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                           APP VERSION
 stackrox-secured-cluster-svcs   stackrox        1               2022-10-06 23:42:55.423977249 +0000 UTC deployed        stackrox-secured-cluster-services-72.0.0        3.72.0
 
-== Subscription not deploying
+== ClusterName Hardcoded
 
-WIP, I've broken something causing the sub not to create a Helmrelease anymore.
+Because the Subscription resource must be created on the Hub cluster, the `clusterName` value passed as a Helm value will always be "local-cluster". As a workaround POC there is a hardcoded value of "eks-tofu" in place here.
 
-[source,]
-$ oc get subscriptions/stackrox-secured-cluster-services -n stackrox
-NAME                                SUBSCRIPTIONSTATE   APPSTATUSREFERENCE   AGE    UPDATED   LOCAL PLACEMENT   TIME WINDOW
-stackrox-secured-cluster-services                                            107m
-$ oc get helmreleases -n stackrox
-No resources found in stackrox namespace.
+[source,yaml]
+----
+                spec:
+                  channel: rhacs-charts-ns/rhacs-charts
+                  name: stackrox-secured-cluster-services
+                  packageOverrides:
+                  - packageName: stackrox-secured-cluster-services
+                    packageAlias: stackrox-secured-cluster-svcs
+                    packageOverrides:
+                    - path: spec
+                      value:
+                        allowNonstandardReleaseName: true
+                        centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+                        clusterName: '{{hub .ManagedClusterName hub}}' # will always be 'local-cluster'
+----
 
-== SecuredCluster Resource
+**Workaround**
 
-Deployment not yet verified.
+Hardcode the clusterName in the policy but then it only works for a single cluster.
+
+.Possible workaround...
+* Use policy to create CRD channels.apps.open-cluster-management.io  on the managed cluster
+* Create the Helm channel on the managed cluster instead of the Hub
+* Create the Subscription on the managed cluster instead of the Hub
