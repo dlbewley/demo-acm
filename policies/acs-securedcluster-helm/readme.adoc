@@ -25,7 +25,7 @@ Target is any platform that does lacks Operator Lifecycle Management.
 
 == Requirements
 
-Cluster init-bundle generated and resulting secrets stored in stackrox namespace:
+Cluster init-bundle generated and resulting secrets stored in stackrox namespace on Hub cluster:
 
 * admission-control-tls
 * collector-tls
@@ -56,7 +56,9 @@ You have chosen a release name of 'stackrox-secured-cluster--2c11b', not
 
 **Workaround**
 
-The workaround for the moment is to set the `spec.packageOverrides.packageAlias` to a name at 32 characters or less (.i.e. _stackrox-secured-cluster-svcs_), and set `allowNonstandardReleaseName: true` in the packageOverrides, so the Chart will accept it.
+.The workaround for the moment is to:
+* set the `spec.packageOverrides.packageAlias` to a name at 32 characters or less (.i.e. _stackrox-secured-cluster-svcs_)
+* set `allowNonstandardReleaseName: true` in the packageOverrides, so the Chart will accept it
 
 [source,]
 managed-cluster$ helm list -A
