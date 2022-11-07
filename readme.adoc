@@ -193,10 +193,7 @@ $ kustomize build kustomize/observability | oc apply -f -
 
 ==== Observability for EKS
 
-OpenShift will "just work", but for EKS you must https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html[deploy the Kubernetes Metrics Server] to EKS cluster
-
-[source,bash]
-kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+OpenShift will "just work", but for EKS ACM must https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html[deploy the Kubernetes Metrics Server]. This now happens automatically.
 
 == Install Demo Materials
 

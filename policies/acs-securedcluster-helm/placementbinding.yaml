@@ -2,34 +2,30 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-acs-securedcluster
+  name: binding-policy-acs-securedcluster-helm
 
 placementRef:
   apiGroup: apps.open-cluster-management.io
   kind: PlacementRule
-  name: placement-policy-acs-securedcluster
+  name: placement-policy-acs-securedcluster-helm
 
 subjects:
   - apiGroup: policy.open-cluster-management.io
     kind: Policy
-    name: policy-acs-securedcluster
-
-  - apiGroup: policy.open-cluster-management.io
-    kind: Policy
-    name: policy-acs-securedcluster-namespace
+    name: policy-acs-securedcluster-helm
 
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-acs-securedcluster-secret
+  name: binding-policy-acs-securedcluster-helm-sub
 
 placementRef:
   apiGroup: apps.open-cluster-management.io
   kind: PlacementRule
-  name: placement-policy-acs-securedcluster-secrets
+  name: placement-policy-acs-securedcluster-helm-sub
 
 subjects:
   - apiGroup: policy.open-cluster-management.io
     kind: Policy
-    name: policy-acs-securedcluster-secrets
+    name: policy-acs-securedcluster-helm-sub

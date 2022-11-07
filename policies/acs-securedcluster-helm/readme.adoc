@@ -1,0 +1,112 @@
+= Policy ACS-SecuredCluster-Helm
+
+== Description
+
+Ensure that cluster is secured by ACS.
+Installs Helm chart rather than Operator subscription.
+
+
+.See also
+* <https://docs.openshift.com/acs/3.72/installing/installing_helm/install-helm-customization.html>
+* <https://github.com/stolostron/policy-collection/tree/main/policygenerator/policy-sets/community/openshift-plus>
+
+.Effect
+* Create a Channel on Hub for RHACS Helm charts 'https://mirror.openshift.com/pub/rhacs/charts/'
+* Create a Subscription to install stackrox-secured-cluster-services Helm chart on managed cluster.
+* Override Helm chart values with RHACS init bundle values.
+
+.Remediation
+* Enforce
+
+.Scope
+* vendor=EKS
+
+Target is any platform that does lacks Operator Lifecycle Management.
+
+== Requirements
+
+Cluster init-bundle generated and resulting secrets stored in stackrox namespace on Hub cluster:
+
+* admission-control-tls
+* collector-tls
+* sensor-tls
+
+You must generate the cluster init-bundle using the ACS Central web console and apply the results. See also: https://github.com/redhat-cop/gitops-catalog/blob/main/advanced-cluster-security-operator/instance/base/create-cluster-init-bundle-job.yaml
+
+== Deploy
+
+[source,bash]
+----
+cd policies/acs-securedcluster-helm
+oc apply -k .
+----
+
+= Bugs and Known Issues
+
+== Helm Release Name is Too Long
+
+The default release name 'stackrox-secured-cluster-services' is 34 characters. When installed by ACM that name will be truncated and get a random suffix to get the length to 32 characters.
+
+This non-default name is blocked by the chart and prevents installation.
+
+[source,]
+FATAL ERROR:
+You have chosen a release name of 'stackrox-secured-cluster--2c11b', not
+'stackrox-secured-cluster-services'. We strongly recommend using the standard release name. If you
+
+**Workaround**
+
+.The workaround for the moment is to:
+* set the `spec.packageOverrides.packageAlias` to a name at 32 characters or less (.i.e. _stackrox-secured-cluster-svcs_)
+* set `allowNonstandardReleaseName: true` in the packageOverrides, so the Chart will accept it
+
+[source,]
+managed-cluster$ helm list -A
+NAME                            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                           APP VERSION
+stackrox-secured-cluster-svcs   stackrox        1               2022-10-06 23:42:55.423977249 +0000 UTC deployed        stackrox-secured-cluster-services-72.0.0        3.72.0
+
+== ClusterName must be Hardcoded
+
+Because the Subscription resource must be created on the Hub cluster, the `clusterName` value passed as a Helm value will always be "local-cluster". As a workaround POC there is a hardcoded value of "eks-tofu" in place here.
+
+[source,yaml]
+----
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps.open-cluster-management.io/v1
+                kind: Subscription
+                metadata:
+                  annotations:
+                  labels:
+                    app: stackrox-secured-cluster-services
+                  name: stackrox-secured-cluster-services
+                  namespace: stackrox
+                spec:
+                  channel: rhacs-charts-ns/rhacs-charts
+                  name: stackrox-secured-cluster-services
+                  packageOverrides:
+                  - packageName: stackrox-secured-cluster-services
+                    packageAlias: stackrox-secured-cluster-svcs # <-- must be 32 char or less
+                    packageOverrides:
+                    - path: spec
+                      value:
+                        allowNonstandardReleaseName: true
+                        centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+                        clusterName: '{{hub .ManagedClusterName hub}}' # <-- will always be 'local-cluster' unless hardcoded
+----
+
+**Workaround**
+
+Hardcode the clusterName in the policy but then it only works for a single cluster.
+
+.Possible workaround...
+* Use policy to create CRD channels.apps.open-cluster-management.io  on the managed cluster
+* Create the Helm channel on the managed cluster instead of the Hub
+* Create the Subscription on the managed cluster instead of the Hub
+
+.Other possible workaround...
+* Put a Helm https://helm.sh/docs/chart_template_guide/functions_and_pipelines/#using-the-lookup-function[lookup()] in place of the clusterName value.
+* clustername is available at `Klusterlet.operator.open-cluster-management.io/klusterlet.spec.clusterName`
+* This does not seem to be supported by the helm operator though.
+** https://github.com/operator-framework/operator-sdk/issues/5728
+** https://github.com/helm/helm/issues/8137

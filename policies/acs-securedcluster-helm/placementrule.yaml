@@ -4,26 +4,24 @@ kind: PlacementRule
 metadata:
   labels:
     app: acs
-  name: placement-policy-acs-securedcluster
+  name: placement-policy-acs-securedcluster-helm
 spec:
   clusterConditions:
   - status: "True"
     type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-    - key: vendor
+    - key: local-cluster
       operator: In
       values:
-      - "OpenShift"
-      - "EKS"
-
+      - "true"
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
   labels:
     app: acs
-  name: placement-policy-acs-securedcluster-secrets
+  name: placement-policy-acs-securedcluster-helm-sub
 spec:
   clusterConditions:
   - status: "True"
@@ -33,8 +31,4 @@ spec:
     - key: vendor
       operator: In
       values:
-      - "OpenShift"
-    - key: local-cluster
-      operator: NotIn
-      values:
-      - "true"
+      - EKS
