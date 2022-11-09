@@ -1,0 +1,31 @@
+---
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: demo-gcp-tofu-org
+  labels:
+    cloud: Google
+    region: us-west2
+    vendor: OpenShift
+spec:
+  baseDomain: gcp.tofu.org
+  clusterName: demo
+  controlPlaneConfig:
+    servingCertificates: {}
+  installAttemptsLimit: 1
+  installed: false
+  platform:
+    gcp:
+      credentialsSecretRef:
+        name: gcp-creds
+      region: us-west2
+  provisioning:
+    installConfigSecretRef:
+      name: install-config
+    sshPrivateKeySecretRef:
+      name: ssh-private-key
+    imageSetRef:
+       #quay.io/openshift-release-dev/ocp-release:4.11.12-x86_64
+      name: img4.11.12-x86-64-appsub
+  pullSecretRef:
+    name: pull-secret
