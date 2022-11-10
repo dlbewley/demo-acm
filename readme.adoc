@@ -47,20 +47,13 @@ $ find . -name secrets -o -name certs
 ./credentials/azure/secrets
 ./credentials/ssh-keys/secrets
 ./credentials/aws/secrets
+./credentials/gcp/secrets
 ./credentials/ocm/secrets
 ./credentials/base/secrets
 ./credentials/base/certs
 ./kustomize/oauth/secrets
 ./kustomize/observability/secrets # defer edits
 
-
-* Generate random passwords and an htpasswd from the values found in link:kustomize/oauth/secrets/[kustomize/oauth/secrets/]
-
-[source,bash]
-----
-$ cd kustomize/oauth
-$ make
-----
 
 * Update vCenter password (`.platform.vsphere.password`) in vsphere example until <https://bugzilla.redhat.com/show_bug.cgi?id=1996188> resolves
 
@@ -81,6 +74,7 @@ $ oc apply -k credentials/hub
 $ kustomize build credentials/hub | kfilt -k secret | grep ' name:'
   name: aws-creds
   name: azure-creds
+  name: gcp-creds
   name: ocm-creds
   name: pull-secret
   name: ssh-private-key
@@ -97,6 +91,24 @@ $ kustomize build credentials/hub | kfilt -k secret | grep ' name:'
 $ kustomize build clusters/aws-demo     | oc apply -f -
 $ kustomize build clusters/az-demo      | oc apply -f -
 $ kustomize build clusters/vsphere-demo | oc apply -f -
+----
+
+:star: **Pro Tip** pipe `kustomize build` to `yq e . -` to preview before applying. Or skip both with `oc apply -k`
+
+[source,bash]
+----
+$ oc apply -k clusters/gcp-demo
+
+namespace/demo-gcp-tofu-org created
+secret/gcp-creds created
+secret/install-config created
+secret/pull-secret created
+secret/ssh-private-key created
+secret/ssh-public-key created
+klusterletaddonconfig.agent.open-cluster-management.io/demo-gcp-tofu-org created
+managedcluster.cluster.open-cluster-management.io/demo-gcp-tofu-org created
+clusterdeployment.hive.openshift.io/demo-gcp-tofu-org created
+machinepool.hive.openshift.io/gcp-demo-worker created
 ----
 
 ==== Deploy EKS Cluster
@@ -151,11 +163,33 @@ $ export KUBECONFIG=demo-az-tofu-org/auth/kubeconfig
 $ oc describe console
 ----
 
+=== Htpasswd Authentication
+
+* Generate random passwords and feed to an htpasswd file containing the values found in link:kustomize/oauth/secrets/[kustomize/oauth/secrets/]
+
+[source,bash]
+----
+$ cd kustomize/oauth
+$ touch secrets/passwords/$USER
+# for each username in secrets/passwords inject a random password
+# and build an htpasswd file
+$ make
+$ cat secrets/passwords/$USER
+$ cat secrets/htpasswd
+$ cd ../..
+----
+
 * Configure htpasswd auth. This will create the htpasswd secret. You must modify the `oauth/cluster` resource by hand. See link:kustomize/oauth/patch-oauth.yaml[]
 
 [source,bash]
+----
+# log in to demo cluster
 $ export KUBECONFIG=demo-az-tofu-org/auth/kubeconfig
+# create htpasswd secret
 $ kustomize build kustomize/oauth | oc apply -f -
+# enable htpasswd authN
+$ oc patch oauth/cluster --patch-file kustomize/oauth/patch-oauth.yaml --type=merge
+----
 
 === Observability
 
