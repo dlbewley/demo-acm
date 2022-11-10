@@ -1,0 +1,21 @@
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: demo-gcp-tofu-org
+spec:
+  clusterName: demo-gcp-tofu-org
+  clusterNamespace: demo-gcp-tofu-org
+  clusterLabels:
+    cloud: Google
+    vendor: OpenShift
+  applicationManager:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  certPolicyController:
+    enabled: true
+  iamPolicyController:
+    enabled: true
