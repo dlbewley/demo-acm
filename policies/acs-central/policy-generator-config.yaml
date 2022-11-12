@@ -1,0 +1,24 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: acs-central-policies
+
+# placementBindingDefaults: {}
+
+policyDefaults:
+  namespace: open-cluster-management-policies
+  remediationAction: enforce
+  severity: high
+  categories: 
+    - CM Configuration Management
+    - TofuOrg Baseline
+  # dependencies:
+  #   - name: policy-acs-operator
+  placement:
+    clusterSelectors:
+      local-cluster: "true"
+
+policies:
+  - name: policy-acs-operator
+    manifests:
+      - path: manifests

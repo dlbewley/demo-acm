@@ -1,0 +1,11 @@
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  annotations:
+    apps.open-cluster-management.io/reconcile-rate: medium
+  name: acs-overlays-default
+  namespace: stackrox
+spec:
+  pathname: https://github.com/redhat-cop/gitops-catalog.git
+  type: Git
