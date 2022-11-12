@@ -1,0 +1,22 @@
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  labels:
+    app: acs
+  name: openshifts-not-hub
+  namespace: stackrox
+spec:
+  clusterConditions:
+  - status: "True"
+    type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+    - key: vendor
+      operator: In
+      values:
+      - "OpenShift"
+    - key: local-cluster
+      operator: NotIn
+      values:
+      - "true"

@@ -1,0 +1,34 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: acs-central-policies
+
+# placementBindingDefaults:{}
+
+#  field orderViaDependencies found but not defined in type PolicyGenerator
+# orderViaDependencies: "true"
+
+    # dependencies:
+    #   - name: policy-acs-securedcluster
+
+policyDefaults:
+  namespace: stackrox
+  remediationAction: enforce
+  severity: high
+  categories: 
+    - CM Configuration Management
+    - TofuOrg Baseline
+
+policies:
+  - name: policy-acs-securedcluster
+    manifests:
+      - path: manifests-policy-acs-securedcluster
+    placement:
+      placementRulePath: placements/placementrule-openshifts-xks.yaml
+
+  - name: policy-acs-securedcluster-secrets
+    manifests:
+      - path: manifests-policy-acs-securedcluster-secrets
+    placement:
+      placementRulePath: placements/placementrule-openshifts-not-hub.yaml
