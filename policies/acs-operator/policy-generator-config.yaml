@@ -1,0 +1,22 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: acs-operator-policies
+
+# placementBindingDefaults: {}
+
+policyDefaults:
+  namespace: override-me-in-kustomization-yaml
+  remediationAction: enforce
+  severity: high
+  categories: 
+    - CM Configuration Management
+    - TofuOrg Baseline
+  placement:
+    clusterSelectors:
+      vendor: "OpenShift"
+
+policies:
+  - name: policy-acs-operator
+    manifests:
+      - path: manifests
