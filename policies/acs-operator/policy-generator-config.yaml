@@ -3,10 +3,8 @@ kind: PolicyGenerator
 metadata:
   name: acs-operator-policies
 
-# placementBindingDefaults: {}
-
 policyDefaults:
-  namespace: override-me-in-kustomization-yaml
+  namespace: open-cluster-management-policies
   remediationAction: enforce
   severity: high
   categories: 
