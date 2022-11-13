@@ -1,6 +1,10 @@
-= Policy ACS-SecuredCluster-Helm
+= Secured Cluster Policies for Helm
 
-== Description
+For Helm environments
+
+== Policy ACS-SecuredCluster-Helm
+
+=== Description
 
 Ensure that cluster is secured by ACS.
 Installs Helm chart rather than Operator subscription.
@@ -23,7 +27,7 @@ Installs Helm chart rather than Operator subscription.
 
 Target is any platform that does lacks Operator Lifecycle Management.
 
-== Requirements
+=== Requirements
 
 Cluster init-bundle generated and resulting secrets stored in stackrox namespace on Hub cluster:
 
@@ -33,7 +37,7 @@ Cluster init-bundle generated and resulting secrets stored in stackrox namespace
 
 You must generate the cluster init-bundle using the ACS Central web console and apply the results. See also: https://github.com/redhat-cop/gitops-catalog/blob/main/advanced-cluster-security-operator/instance/base/create-cluster-init-bundle-job.yaml
 
-== Deploy
+=== Deploy
 
 [source,bash]
 ----
@@ -41,9 +45,9 @@ cd policies/acs-securedcluster-helm
 oc apply -k .
 ----
 
-= Bugs and Known Issues
+== Bugs and Known Issues
 
-== Helm Release Name is Too Long
+=== Helm Release Name is Too Long
 
 The default release name 'stackrox-secured-cluster-services' is 34 characters. When installed by ACM that name will be truncated and get a random suffix to get the length to 32 characters.
 
@@ -65,7 +69,7 @@ managed-cluster$ helm list -A
 NAME                            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                                           APP VERSION
 stackrox-secured-cluster-svcs   stackrox        1               2022-10-06 23:42:55.423977249 +0000 UTC deployed        stackrox-secured-cluster-services-72.0.0        3.72.0
 
-== ClusterName must be Hardcoded
+=== ClusterName must be Hardcoded
 
 Because the Subscription resource must be created on the Hub cluster, the `clusterName` value passed as a Helm value will always be "local-cluster". As a workaround POC there is a hardcoded value of "eks-tofu" in place here.
 

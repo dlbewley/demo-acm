@@ -1,6 +1,10 @@
-= Policy ACS-SecuredCluster
+= Secured Cluster Policies
 
-== Description
+For OLM environments
+
+== Policy ACS-SecuredCluster
+
+=== Description
 
 Ensure that cluster is secured by ACS.
 
@@ -13,9 +17,38 @@ See also <https://github.com/stolostron/policy-collection/tree/main/policygenera
 * Enforce
 
 .Scope
-* vendor=OpenShift
+* vendor=[EKS,GKE,OpenShift]
 
-== Requirements
+=== Requirements
+
+Cluster init-bundle generated and resulting secrets stored in stackrox namespace:
+
+* admission-control-tls
+* collector-tls
+* sensor-tls
+
+You must generate the cluster init-bundle using the ACS Central web console and apply the results. See also: https://github.com/redhat-cop/gitops-catalog/blob/main/advanced-cluster-security-operator/instance/base/create-cluster-init-bundle-job.yaml
+
+=== Known Issues and Bugs
+
+Needs further validation for xKS
+
+== Policy ACS-SecuredCluster-Secrets
+
+=== Description
+
+Ensure cluster init bundle contents are propegated to secured clusters.
+
+.Effect
+* Create TLS secrets on managed clusters Stackrox cluster init bundle on hub cluster.
+
+.Remediation
+* Enforce
+
+.Scope
+* vendor=OpenShift (not local-cluster)
+
+=== Requirements
 
 Cluster init-bundle generated and resulting secrets stored in stackrox namespace:
 
@@ -30,6 +63,10 @@ You must generate the cluster init-bundle using the ACS Central web console and 
 [source,bash]
 ----
 cd policies/acs-securedcluster
-oc apply -k .
+kustomize build --enable-alpha-plugins . | oc apply -f -
 oc get securedcluster -n stackrox
 ----
+
+=== Known Issues and Bugs
+
+Needs further validation for xKS
