@@ -18,7 +18,7 @@ spec:
           value:
             allowNonstandardReleaseName: true
             centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
-            clusterName: 'eks-tofu'
+            clusterName: 'gke-custom'
             badclusterName: '{{hub .ManagedClusterName hub}}'
             admissionControl:
               serviceTLS:
