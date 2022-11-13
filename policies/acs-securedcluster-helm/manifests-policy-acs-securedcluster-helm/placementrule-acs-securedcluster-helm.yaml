@@ -5,6 +5,7 @@ metadata:
   labels:
     app: acs
   name: xks-only
+  namespace: stackrox
 spec:
   clusterConditions:
   - status: "True"
