@@ -1,0 +1,26 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: acs-operator-policies
+
+policyDefaults:
+  namespace: stackrox
+  remediationAction: enforce
+  severity: high
+  categories: 
+    - CM Configuration Management
+    - TofuOrg Baseline
+
+
+policies:
+  - name: acs-securedcluster-helm
+    manifests:
+      - path: manifests-policy-acs-securedcluster-helm
+    placement:
+      placementRulePath: placements/placementrule-local-cluster.yaml
+
+  - name: acs-securedcluster-helm-sub
+    manifests:
+      - path: manifests-policy-acs-securedcluster-helm-sub
+    placement:
+      placementRulePath: placements/placementrule-xks-only.yaml
