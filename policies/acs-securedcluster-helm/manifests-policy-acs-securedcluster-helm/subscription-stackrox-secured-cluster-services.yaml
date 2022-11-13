@@ -49,4 +49,4 @@ spec:
     placementRef:
       kind: PlacementRule
       # name: acs-securedcluster-helm
-      name: placement-policy-acs-securedcluster-helm-sub
+      name: xks-only
