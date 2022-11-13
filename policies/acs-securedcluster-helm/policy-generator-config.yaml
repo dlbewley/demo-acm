@@ -1,7 +1,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: PolicyGenerator
 metadata:
-  name: acs-operator-policies
+  name: rhacs-helm-policies
 
 policyDefaults:
   namespace: stackrox
@@ -10,7 +10,6 @@ policyDefaults:
   categories: 
     - CM Configuration Management
     - TofuOrg Baseline
-
 
 policies:
   - name: acs-securedcluster-helm

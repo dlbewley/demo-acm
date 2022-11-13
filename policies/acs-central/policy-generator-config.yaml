@@ -1,9 +1,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: PolicyGenerator
 metadata:
-  name: acs-central-policies
-
-# placementBindingDefaults: {}
+  name: rhacs-central-policies
 
 policyDefaults:
   namespace: open-cluster-management-policies
@@ -12,8 +10,7 @@ policyDefaults:
   categories: 
     - CM Configuration Management
     - TofuOrg Baseline
-  # dependencies:
-  #   - name: policy-acs-operator
+  
   placement:
     clusterSelectors:
       local-cluster: "true"

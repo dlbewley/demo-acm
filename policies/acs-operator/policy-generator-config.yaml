@@ -1,7 +1,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: PolicyGenerator
 metadata:
-  name: acs-operator-policies
+  name: rhacs-operator-policies
 
 policyDefaults:
   namespace: open-cluster-management-policies

@@ -2,15 +2,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: PolicyGenerator
 metadata:
-  name: acs-central-policies
-
-# placementBindingDefaults:{}
-
-#  field orderViaDependencies found but not defined in type PolicyGenerator
-# orderViaDependencies: "true"
-
-    # dependencies:
-    #   - name: policy-acs-securedcluster
+  name: rhacs-securedcluster-policies
 
 policyDefaults:
   namespace: stackrox
