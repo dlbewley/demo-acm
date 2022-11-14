@@ -4,7 +4,7 @@ kind: PlacementRule
 metadata:
   labels:
     app: acs
-  name: openshifts-xks
+  name: openshift-only
   namespace: stackrox
 spec:
   clusterConditions:
@@ -16,5 +16,3 @@ spec:
       operator: In
       values:
       - "OpenShift"
-      - "EKS"
-      - "GKE"

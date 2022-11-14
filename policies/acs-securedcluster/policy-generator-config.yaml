@@ -17,10 +17,10 @@ policies:
     manifests:
       - path: manifests-policy-acs-securedcluster
     placement:
-      placementRulePath: placements/placementrule-openshifts-xks.yaml
+      placementRulePath: placements/placementrule-openshift-only.yaml
 
   - name: policy-acs-securedcluster-secrets
     manifests:
       - path: manifests-policy-acs-securedcluster-secrets
     placement:
-      placementRulePath: placements/placementrule-openshifts-not-hub.yaml
+      placementRulePath: placements/placementrule-openshift-not-hub.yaml
