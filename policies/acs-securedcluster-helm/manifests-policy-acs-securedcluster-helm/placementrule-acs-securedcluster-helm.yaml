@@ -1,0 +1,15 @@
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  labels:
+    app: acs
+  name: xks-only
+  namespace: stackrox
+spec:
+  clusterSelector:
+    matchExpressions:
+    - key: vendor
+      operator: NotIn
+      values:
+      - OpenShift

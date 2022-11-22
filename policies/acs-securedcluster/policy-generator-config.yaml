@@ -1,0 +1,26 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: rhacs-securedcluster-policies
+
+policyDefaults:
+  namespace: stackrox
+  remediationAction: enforce
+  severity: high
+  categories: 
+    - CM Configuration Management
+    - TofuOrg Baseline
+
+policies:
+  - name: policy-acs-securedcluster
+    manifests:
+      - path: manifests-policy-acs-securedcluster
+    placement:
+      placementRulePath: placements/placementrule-openshift-only.yaml
+
+  - name: policy-acs-securedcluster-secrets
+    manifests:
+      - path: manifests-policy-acs-securedcluster-secrets
+    placement:
+      placementRulePath: placements/placementrule-openshift-not-hub.yaml

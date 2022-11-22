@@ -1,0 +1,54 @@
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  annotations:
+  labels:
+    app: stackrox-secured-cluster-services
+  name: stackrox-secured-cluster-services
+  namespace: stackrox
+spec:
+  channel: rhacs-charts-ns/rhacs-charts
+  name: stackrox-secured-cluster-services
+  packageOverrides:
+    - packageName: stackrox-secured-cluster-services
+      packageAlias: stackrox-secured-cluster-svcs
+      packageOverrides:
+        - path: spec
+          value:
+            allowNonstandardReleaseName: true
+            centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+            # !! TODO hardcoded workaround !!
+            clusterName: 'gke-custom'
+            wrongclusterName: '{{hub .ManagedClusterName hub}}'
+            admissionControl:
+              serviceTLS:
+                cert: |
+                  {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "admission-control-cert.pem") | base64dec | autoindent hub}}
+                key: |
+                  {{hub (index (lookup "v1" "Secret" "stackrox" "admission-control-tls").data "admission-control-key.pem") | base64dec | autoindent hub}}
+            ca:
+              cert: |
+                {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "ca.pem") | base64dec | autoindent hub}}
+            collector:
+              serviceTLS:
+                cert: |
+                  {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "collector-cert.pem") | base64dec | autoindent hub}}
+                key: |
+                  {{hub (index (lookup "v1" "Secret" "stackrox" "collector-tls").data "collector-key.pem") | base64dec | autoindent hub}}
+            sensor:
+              serviceTLS:
+                cert: |
+                  {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-cert.pem") | base64dec | autoindent hub}}
+                key: |
+                  {{hub (index (lookup "v1" "Secret" "stackrox" "sensor-tls").data "sensor-key.pem") | base64dec | autoindent hub}}
+            imagePullSecrets:
+              useExisting: open-cluster-management-image-pull-credentials
+  placement:
+    # local: true
+    # ^ IF subscription is created ON the managed cluster, place it "locally",
+    # ^ but that's not viable because a managed cluster does not know what a 'Channel' is without adding the CRD
+    placementRef:
+      # where to subscribe
+      kind: PlacementRule
+      name: xks-only

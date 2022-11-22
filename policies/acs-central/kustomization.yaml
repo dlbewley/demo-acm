@@ -2,7 +2,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources:
-  - policy.yaml
-  - placementrule.yaml
-  - placementbinding.yaml
+namespace: open-cluster-management-policies
+
+generators:
+  - policy-generator-config.yaml

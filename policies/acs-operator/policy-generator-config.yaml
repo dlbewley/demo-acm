@@ -1,0 +1,20 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: rhacs-operator-policies
+
+policyDefaults:
+  namespace: open-cluster-management-policies
+  remediationAction: enforce
+  severity: high
+  categories: 
+    - CM Configuration Management
+    - TofuOrg Baseline
+  placement:
+    clusterSelectors:
+      vendor: "OpenShift"
+
+policies:
+  - name: policy-acs-operator
+    manifests:
+      - path: manifests

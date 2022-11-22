@@ -25,10 +25,12 @@ Ensures that a cluster is configured to host ACS Central services
 
 == Deploy
 
+Requires https://github.com/stolostron/policy-generator-plugin Kustomize plugin
+
 [source,bash]
 ----
 cd policies/acs-central
-oc apply -k .
+kustomize build --enable-alpha-plugins . | oc apply -f -
 oc get central -n stackrox
 oc get secrets -n stackrox | grep tls
 ----

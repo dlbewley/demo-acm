@@ -4,7 +4,5 @@ kind: Kustomization
 
 namespace: open-cluster-management-policies
 
-resources:
-  - policy.yaml
-  - placementrule.yaml
-  - placementbinding.yaml
+generators:
+  - policy-generator-config.yaml
