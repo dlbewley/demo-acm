@@ -6,7 +6,7 @@ For OLM environments
 
 === Description
 
-Ensure that cluster is secured by ACS.
+Ensure that cluster is secured by RHACS.
 
 See also <https://github.com/stolostron/policy-collection/tree/main/policygenerator/policy-sets/community/openshift-plus>
 
@@ -39,6 +39,8 @@ Needs further validation for xKS
 
 Ensure cluster init bundle contents are propegated to secured clusters.
 
+Non-OLM, xKS clusters will recieve secrets via Helm values. See link:../acs-securedcluster-helm[acs-securedcluster-helm policy].
+
 .Effect
 * Create TLS secrets on managed clusters Stackrox cluster init bundle on hub cluster.
 
@@ -50,15 +52,17 @@ Ensure cluster init bundle contents are propegated to secured clusters.
 
 === Requirements
 
-Cluster init-bundle generated and resulting secrets stored in stackrox namespace:
+Cluster init-bundle pre-generated, and resulting secrets stored in stackrox namespace:
 
 * admission-control-tls
 * collector-tls
 * sensor-tls
 
-You must generate the cluster init-bundle using the ACS Central web console and apply the results. See also: https://github.com/redhat-cop/gitops-catalog/blob/main/advanced-cluster-security-operator/instance/base/create-cluster-init-bundle-job.yaml
+You must generate the cluster init-bundle using the RHACS Central web console and apply the results. See also: https://github.com/redhat-cop/gitops-catalog/blob/main/advanced-cluster-security-operator/instance/base/create-cluster-init-bundle-job.yaml
 
 == Deploy
+
+Requires https://github.com/stolostron/policy-generator-plugin Kustomize plugin
 
 [source,bash]
 ----

@@ -4,8 +4,6 @@
 
 Ensure that the RHACS Operator is installed.
 
-This work is derivative of Simon Delord's <https://github.com/SimonDelord/ACM-Templates/tree/master/resources12>
-
 .Effect
 * Install RHACM Operator
 
@@ -17,9 +15,11 @@ This work is derivative of Simon Delord's <https://github.com/SimonDelord/ACM-Te
 
 == Deploy
 
+Requires https://github.com/stolostron/policy-generator-plugin Kustomize plugin
+
 [source,bash]
 ----
 cd policies/acs-operator
-oc apply -k .
+kustomize build --enable-alpha-plugins . | oc apply -f -
 oc get csv -n rhacs-operator
 ----

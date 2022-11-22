@@ -39,10 +39,12 @@ You must generate the cluster init-bundle using the ACS Central web console and 
 
 === Deploy
 
+Requires https://github.com/stolostron/policy-generator-plugin Kustomize plugin
+
 [source,bash]
 ----
 cd policies/acs-securedcluster-helm
-oc apply -k .
+kustomize build --enable-alpha-plugins . | oc apply -f -
 ----
 
 == Bugs and Known Issues
@@ -114,3 +116,36 @@ Hardcode the clusterName in the policy but then it only works for a single clust
 * This does not seem to be supported by the helm operator though.
 ** https://github.com/operator-framework/operator-sdk/issues/5728
 ** https://github.com/helm/helm/issues/8137
+
+
+== Troubleshooting Helm Deployment of RHACS
+
+Troubleshooting can be difficult, because th Helmrelease will be automatically and repeatedly uninstalled and reinstalled if a failure is detected.
+
+You might find a tool like https://k9scli.io/[k9s] handy to monitor churning resources.
+
+* Examine the `helmrelease` on the managed xKS cluster.
+
+[source,bash]
+----
+# check if subscription has no subscriptionstate nor events
+EKS$ kubectl get subscriptions -n stackrox 
+# quickly capture it before it is deleted
+EKS$ kubectl get helmrelease/stackrox-secured-cluster-svcs -n stackrox -o yaml > helmrelease.yaml
+# examine the Helm generated resources
+EKS$ yq '.status.deployedRelease.manifest' helmrelease.yaml > helmrelease-status.yaml
+----
+
+* The following error can occur if the `sensor` pod never gets out of pending. This will happen if there is insufficient CPU to satisfy the request.
+
+[source,plain]
+$ kubectl logs -l app=collector -n stackrox
+Defaulted container "collector" out of: collector, compliance
+[I 20221113 235139 FileDownloader.cpp:316] Fail to download /module/collector-ebpf.o.gz - Failed to connect to sensor.stackrox.svc port 443: Connection refused
+[W 20221113 235141 FileDownloader.cpp:332] Failed to download /module/collector-ebpf.o.gz
+[W 20221113 235141 GetKernelObject.cpp:183] Unable to download kernel object collector-ebpf-5.10.127-16623.227.1-cos.o to /module/collector-ebpf.o.gz
+[W 20221113 235141 collector.cpp:343] Error getting kernel object: collector-ebpf-5.10.127-16623.227.1-cos.o
+[I 20221113 235141 collector.cpp:215] gRPC server=sensor.stackrox.svc:443
+[I 20221113 235141 collector.cpp:357] Attempting to connect to GRPC server
+[E 20221113 235141 collector.cpp:359] Unable to connect to the GRPC server.
+[F 20221113 235141 collector.cpp:368] No suitable kernel object downloaded

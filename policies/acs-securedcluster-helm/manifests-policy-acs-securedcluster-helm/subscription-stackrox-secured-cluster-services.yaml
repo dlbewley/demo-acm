@@ -18,8 +18,9 @@ spec:
           value:
             allowNonstandardReleaseName: true
             centralEndpoint: '{{hub (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host hub}}:443'
+            # !! TODO hardcoded workaround !!
             clusterName: 'gke-custom'
-            badclusterName: '{{hub .ManagedClusterName hub}}'
+            wrongclusterName: '{{hub .ManagedClusterName hub}}'
             admissionControl:
               serviceTLS:
                 cert: |
@@ -44,9 +45,10 @@ spec:
             imagePullSecrets:
               useExisting: open-cluster-management-image-pull-credentials
   placement:
-    # IF subscription is created ON the managed cluster, so place it "locally".
     # local: true
+    # ^ IF subscription is created ON the managed cluster, place it "locally",
+    # ^ but that's not viable because a managed cluster does not know what a 'Channel' is without adding the CRD
     placementRef:
+      # where to subscribe
       kind: PlacementRule
-      # name: acs-securedcluster-helm
       name: xks-only
