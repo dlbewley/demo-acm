@@ -1,0 +1,232 @@
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-policy-gatekeeper-test
+  namespace: open-cluster-management-policies
+spec:
+  clusterSelector:
+    matchExpressions:
+      - key: environment
+        operator: In
+        values:
+          - dev
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-gatekeeper-test
+  namespace: open-cluster-management-policies
+placementRef:
+  apiGroup: apps.open-cluster-management.io
+  kind: PlacementRule
+  name: placement-policy-gatekeeper-test
+subjects:
+  - apiGroup: policy.open-cluster-management.io
+    kind: Policy
+    name: policy-gatekeeper-test
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  annotations:
+    policy.open-cluster-management.io/categories: CM Configuration Management,TofuOrg Baseline
+    policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+  name: policy-gatekeeper-test
+  namespace: open-cluster-management-policies
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-gatekeeper-test
+        spec:
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: constraints.gatekeeper.sh/v1beta1
+                kind: K8sRequiredLabels
+                metadata:
+                  name: require-labels
+                spec:
+                  match:
+                    kinds:
+                      - apiGroups:
+                          - ""
+                        kinds:
+                          - Namespace
+                  parameters:
+                    labels:
+                      - allowedRegex: .+
+                        key: purpose
+                    message: The label `purpose` is required.
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: templates.gatekeeper.sh/v1beta1
+                kind: ConstraintTemplate
+                metadata:
+                  annotations:
+                    description: Requires all resources to contain a specified label with a value matching a provided regular expression.
+                  name: k8srequiredlabels
+                spec:
+                  crd:
+                    spec:
+                      enforcementAction: dryrun
+                      names:
+                        kind: K8sRequiredLabels
+                      validation:
+                        openAPIV3Schema:
+                          properties:
+                            labels:
+                              items:
+                                properties:
+                                  allowedRegex:
+                                    type: string
+                                  key:
+                                    type: string
+                                type: object
+                              type: array
+                            message:
+                              type: string
+                          type: object
+                  targets:
+                    - rego: |
+                        package k8srequiredlabels
+                        get_message(parameters, _default) = msg {
+                          not parameters.message
+                          msg := _default
+                        }
+                        get_message(parameters, _default) = msg {
+                          msg := parameters.message
+                        }
+                        violation[{"msg": msg, "details": {"missing_labels": missing}}] {
+                          provided := {label | input.review.object.metadata.labels[label]}
+                          required := {label | label := input.parameters.labels[_].key}
+                          missing := required - provided
+                          count(missing) > 0
+                          def_msg := sprintf("you must provide labels: %v", [missing])
+                          msg := get_message(input.parameters, def_msg)
+                        }
+                        violation[{"msg": msg}] {
+                          value := input.review.object.metadata.labels[key]
+                          expected := input.parameters.labels[_]
+                          expected.key == key
+                          # do not match if allowedRegex is not defined, or is an empty string
+                          expected.allowedRegex != ""
+                          not re_match(expected.allowedRegex, value)
+                          def_msg := sprintf("Label <%v: %v> does not satisfy allowed regex: %v", [key, value, expected.allowedRegex])
+                          msg := get_message(input.parameters, def_msg)
+                        }
+                      target: admission.k8s.gatekeeper.sh
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: constraints.gatekeeper.sh/v1beta1
+                kind: K8sRequiredLabels
+                metadata:
+                  name: require-labels
+                spec:
+                  match:
+                    kinds:
+                      - apiGroups:
+                          - ""
+                        kinds:
+                          - Namespace
+                  parameters:
+                    labels:
+                      - allowedRegex: .+
+                        key: purpose
+                    message: The label `purpose` is required.
+          remediationAction: enforce
+          severity: high
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: inform-gatekeeper-audit-require-labels
+        spec:
+          namespaceSelector:
+            exclude:
+              - kube-*
+            include:
+              - '*'
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: constraints.gatekeeper.sh/v1beta1
+                kind: K8sRequiredLabels
+                metadata:
+                  name: require-labels
+                status:
+                  totalViolations: 0
+          remediationAction: inform
+          severity: high
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: inform-gatekeeper-admission-require-labels
+        spec:
+          namespaceSelector:
+            exclude:
+              - kube-*
+            include:
+              - '*'
+          object-templates:
+            - complianceType: mustnothave
+              objectDefinition:
+                annotations:
+                  constraint_action: deny
+                  constraint_kind: K8sRequiredLabels
+                  constraint_name: require-labels
+                  event_type: violation
+                apiVersion: v1
+                kind: Event
+          remediationAction: inform
+          severity: high
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: inform-gatekeeper-audit-require-labels
+        spec:
+          namespaceSelector:
+            exclude:
+              - kube-*
+            include:
+              - '*'
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: constraints.gatekeeper.sh/v1beta1
+                kind: K8sRequiredLabels
+                metadata:
+                  name: require-labels
+                status:
+                  totalViolations: 0
+          remediationAction: inform
+          severity: high
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: inform-gatekeeper-admission-require-labels
+        spec:
+          namespaceSelector:
+            exclude:
+              - kube-*
+            include:
+              - '*'
+          object-templates:
+            - complianceType: mustnothave
+              objectDefinition:
+                annotations:
+                  constraint_action: deny
+                  constraint_kind: K8sRequiredLabels
+                  constraint_name: require-labels
+                  event_type: violation
+                apiVersion: v1
+                kind: Event
+          remediationAction: inform
+          severity: high

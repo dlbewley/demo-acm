@@ -1,0 +1,20 @@
+--- 
+# policy-generator-config.yaml
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: policy-gatekeeper-generator
+
+policyDefaults:
+  namespace: open-cluster-management-policies
+  remediationAction: enforce
+  severity: high
+  
+  placement:
+    clusterSelectors:
+      environment: dev
+
+policies:
+  - name: policy-gatekeeper-generator
+    manifests:
+      - path: manifests
