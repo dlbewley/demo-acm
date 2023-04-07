@@ -12,7 +12,7 @@ metadata:
 spec:
   baseDomain: az.tofu.org
   imageSetRef:
-    name: img4.10.22-x86-64-appsub
+    name: img4.12.10-x86-64-appsub
   # do not create worker machinepool
   skipMachinePools: true
   installConfigSecretTemplateRef:
