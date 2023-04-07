@@ -7,7 +7,6 @@ About this demo
 * ClusterDeployments
 * ClusterPools
 * ClusterSets
-* <<Observability>>
 
 == Deployment
 
@@ -24,20 +23,15 @@ In place of `kustomize build foo | oc apply -f -` you may use `oc apply -k foo`.
 
 [source,bash]
 ----
-kustomize build hub | oc apply -f -
-# first time will produce error below, so run twice:
+$ oc apply -k hub
+# first time will produce error like below, re-run until clean
 # unable to recognize "STDIN": no matches for kind "MultiClusterHub" in version "operator.open-cluster-management.io/v1"
-kustomize build hub | oc apply -f -
+$ oc apply -k hub
 ----
-
-.Observability OBC TODO
-[WARNING]
-unable to recognize "STDIN": no matches for kind "DiscoveryConfig" in version "discovery.open-cluster-management.io/v1alpha1"
-unable to recognize "STDIN": no matches for kind "ObjectBucketClaim" in version "objectbucket.io/v1alpha1"
 
 === Configure Credentials Secrets
 
-* Update the values found in example secrets with your credentials.
+* Update the values found in example secrets with your link:credentials/[credentials].
 
 [source,bash]
 $ find . -name secrets -o -name certs
@@ -52,7 +46,6 @@ $ find . -name secrets -o -name certs
 ./credentials/base/secrets
 ./credentials/base/certs
 ./kustomize/oauth/secrets
-./kustomize/observability/secrets # defer edits
 
 
 * Update vCenter password (`.platform.vsphere.password`) in vsphere example until <https://bugzilla.redhat.com/show_bug.cgi?id=1996188> resolves
@@ -191,44 +184,6 @@ $ kustomize build kustomize/oauth | oc apply -f -
 $ oc patch oauth/cluster --patch-file kustomize/oauth/patch-oauth.yaml --type=merge
 ----
 
-=== Observability
-
-Deploy RHACM https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html-single/observability/index[Observability Service]
-
-* Extract the pull secret to be replicated into observability namespace
-
-[source,bash]
-$ oc extract secret/pull-secret -n openshift-config --to=kustomize/observability/secrets --confirm
-
-* Deploy 
-
-[source,bash]
-$ kustomize build kustomize/observability | oc apply -f -
-
-.**stringData for thanos config**
-[IMPORTANT]
-We have to be roundabout thanks to thanos config coming from stringdata.
-Let me know if you have a snazzy automation for this. I guess this would work <https://github.com/redhat-cop/gitops-catalog/blob/main/advanced-cluster-management/instance/observability/02-install-observability.yaml>
-
-* Update Thanos Config Secret with Object Bucket credentials link:kustomize/observability/secrets/thanos-object-storage.yaml[]
-
-[source,bash]
-----
-# update thanos config by following instructions in the dummy values
-$ vi kustomize/observability/secrets/thanos-object-storage.yaml
-
-# redeploy with updated secret
-$ kustomize build kustomize/observability | oc apply -f -
-----
-
-* Ensure firewall access is permitted from managed clusters to the hub cluster at `observatorium-api-open-cluster-management-observability.apps.<cluster>.<domain>:443`
-
-* Visit Grafana interface at `https://multicloud-console.apps.<cluster>.<domain>/grafana/` and see cluster metrics arrive within a few minutes.
-
-==== Observability for EKS
-
-OpenShift will "just work", but for EKS ACM must https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html[deploy the Kubernetes Metrics Server]. This now happens automatically.
-
 == Install Demo Materials
 
 * Install compliance operator, and setup auto scanning
@@ -277,8 +232,7 @@ $ kustomize build clusterpools/azure-pool  | oc delete -f -
 * Less setup and more demo
 
 .**Bugs**
-* https://bugzilla.redhat.com/show_bug.cgi?id=1995380
-* https://bugzilla.redhat.com/show_bug.cgi?id=1996188
+* "vSphere clusterdeployment requires credentials duplication in install-config.yaml" <https://issues.redhat.com/browse/OCPBUGS-8955> _(was <https://bugzilla.redhat.com/show_bug.cgi?id=1996188>)_
 
 .**Tips**
 * Unlike a ClusterDeployment, a ClusterPool does not directly enable the creation of a machinepool.

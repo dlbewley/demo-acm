@@ -31,6 +31,6 @@ spec:
     sshPrivateKeySecretRef:
       name: ssh-private-key
     imageSetRef:
-      name: img4.10.26-x86-64-appsub
+      name: img4.12.10-x86-64-appsub
   pullSecretRef:
     name: pull-secret
