@@ -32,5 +32,7 @@ spec:
       name: ssh-private-key
     imageSetRef:
       name: img4.12.16-x86-64-appsub
+    manifestsConfigMapRef:
+      name: manifests
   pullSecretRef:
     name: pull-secret
