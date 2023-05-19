@@ -16,6 +16,12 @@ secretGenerator:
     files:
       - install-config.yaml
 
+configMapGenerator:
+  - name: manifests
+    files:
+    - manifests/99-worker-registry-proxy.yaml
+    # - manifests/99-master-registry-proxy.yaml
+
 resources:
   - namespace.yaml
   - managedcluster.yaml
