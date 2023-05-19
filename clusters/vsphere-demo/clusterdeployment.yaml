@@ -6,7 +6,7 @@ metadata:
     cloud: vSphere
     vendor: OpenShift
     customer: Bewley.net
-    cluster.open-cluster-management.io/clusterset: dev-cs
+    # cluster.open-cluster-management.io/clusterset: dev-cs
 spec:
   baseDomain: lab.bewley.net
   clusterName: 'demo'
@@ -22,7 +22,7 @@ spec:
         name: vsphere-certs
       cluster: Goat
       datacenter: Garden
-      defaultDatastore: VMData-HD
+      defaultDatastore: EVO-2
       vCenter: vcenter.lab.bewley.net
       network: lab-192-168-4-0-b24
   provisioning:
@@ -31,6 +31,6 @@ spec:
     sshPrivateKeySecretRef:
       name: ssh-private-key
     imageSetRef:
-      name: img4.12.10-x86-64-appsub
+      name: img4.12.16-x86-64-appsub
   pullSecretRef:
     name: pull-secret
