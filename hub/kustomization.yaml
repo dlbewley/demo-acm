@@ -2,16 +2,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-bases:
-  - github.com/redhat-cop/gitops-catalog/advanced-cluster-management/operator/overlays/release-2.7?ref=main
+resources:
+  - github.com/redhat-cop/gitops-catalog/advanced-cluster-management/operator/overlays/release-2.8?ref=main
   - github.com/redhat-cop/gitops-catalog/advanced-cluster-management/instance/base?ref=main
   - github.com/redhat-cop/gitops-catalog/advanced-cluster-management/instance/observability?ref=main
-
-generatorOptions:
-  disableNameSuffixHash: true
-
-resources:
   - discoveryconfig.yaml
 
 patches:
   - patch-multiclusterhub.yaml
+
+# enabling BM provisioning
+# TODO
+# create the AgentServiceConfig resource
+# create InfraEnv
+# create baremetal hosts using bmc_hosts_template.yaml

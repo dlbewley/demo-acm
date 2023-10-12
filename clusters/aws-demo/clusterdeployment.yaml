@@ -5,14 +5,14 @@ metadata:
   name: demo-aws-tofu-org
   labels:
     cloud: 'AWS'
-    region: 'us-west-2'
+    region: 'us-west-1'
     vendor: 'OpenShift'
     usage: development
     environment: infra
     customer: 'Tofu.org'
 spec:
   baseDomain: aws.tofu.org
-  clusterName: 'demo'
+  clusterName: 'demo2'
   controlPlaneConfig:
     servingCertificates: {}
   installAttemptsLimit: 2
@@ -21,13 +21,13 @@ spec:
     aws:
       credentialsSecretRef:
         name: aws-creds
-      region: us-west-2
+      region: us-west-1
   provisioning:
     installConfigSecretRef:
       name: install-config
     sshPrivateKeySecretRef:
       name: ssh-private-key
     imageSetRef:
-      name: img4.12.10-x86-64-appsub
+      name: img4.13.15-x86-64-appsub
   pullSecretRef:
     name: pull-secret
