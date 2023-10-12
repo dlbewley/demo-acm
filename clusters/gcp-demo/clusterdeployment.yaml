@@ -4,9 +4,9 @@ kind: ClusterDeployment
 metadata:
   name: demo-gcp-tofu-org
   labels:
-    cloud: Google
-    region: us-west2
-    vendor: OpenShift
+    # cloud: Google
+    region: us-central1
+    # vendor: OpenShift
 spec:
   baseDomain: gcp.tofu.org
   clusterName: demo
@@ -25,6 +25,6 @@ spec:
     sshPrivateKeySecretRef:
       name: ssh-private-key
     imageSetRef:
-      name: img4.12.10-x86-64-appsub
+      name: img4.13.15-x86-64-appsub
   pullSecretRef:
     name: pull-secret
