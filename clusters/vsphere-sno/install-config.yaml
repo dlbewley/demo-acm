@@ -26,9 +26,13 @@ platform:
     network: lab-192-168-4-0-b24
     datacenter: Garden
     cluster: Goat
-    defaultDatastore: VMData-HD
+    defaultDatastore: VMData
     vCenter: vcenter.lab.bewley.net
     # https://bugzilla.redhat.com/show_bug.cgi?id=1996188
     password: EXAMPLE
     username: administrator@vcenter.lab.bewley.net
+networking:
+  networkType: OVNKubernetes
+  machineNetwork:
+    - cidr: 192.168.4.0/24
 pullSecret: "" # skip, hive will inject based on it's secrets
