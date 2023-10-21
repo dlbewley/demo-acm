@@ -12,14 +12,17 @@ if [ $? -ne 0 ]; then
 fi
 
 CLUSTER_NAME=${1:-eks-tofu}
-EKS_VERSION=${2:-1.21}
+EKS_VERSION=${2:-1.27}
+
+# RHACS sensor needs 2C, 4G
+#        --node-type t3.medium \
 
 eksctl create cluster \
         --name ${CLUSTER_NAME} \
         --version ${EKS_VERSION} \
         --region us-west-2 \
         --nodegroup-name standard-workers-${CLUSTER_NAME} \
-        --node-type t3.medium \
+        --node-type t3.xlarge \
         --nodes 3 \
         --nodes-min 1 \
         --nodes-max 4 \
