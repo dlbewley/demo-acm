@@ -18,10 +18,10 @@ EKS_VERSION=${2:-1.27}
 #        --node-type t3.medium \
 
 eksctl create cluster \
-        --name ${CLUSTER_NAME} \
-        --version ${EKS_VERSION} \
+        --name "${CLUSTER_NAME}" \
+        --version "${EKS_VERSION}" \
         --region us-west-2 \
-        --nodegroup-name standard-workers-${CLUSTER_NAME} \
+        --nodegroup-name "standard-workers-${CLUSTER_NAME}" \
         --node-type t3.xlarge \
         --nodes 3 \
         --nodes-min 1 \
@@ -32,3 +32,9 @@ eksctl create cluster \
 
 # eksctl utils describe-stacks --region=us-west-2 --cluster=$CLUSTER_NAME
 # eksctl delete cluster --name=eks-tofu
+
+# https://repost.aws/knowledge-center/eks-persistent-storage
+#aws eks describe-cluster --name "$CLUSTER_NAME" --query "cluster.identity.oidc.issuer" --output text
+#None
+#aws iam list-open-id-connect-providers | grep OIDC_PROVIDER_ID
+#$
