@@ -1,8 +1,11 @@
-apiVersion: discovery.open-cluster-management.io/v1alpha1
+---
+apiVersion: discovery.open-cluster-management.io/v1
 kind: DiscoveryConfig
 metadata:
   name: discovery
   namespace: open-cluster-management
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  argocd.argoproj.io/sync-wave: "3"
 spec:
   credential: ocm-creds
   filters:
