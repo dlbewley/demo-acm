@@ -1,12 +1,8 @@
----
+# kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: demo-aws-tofu-org
-
-bases:
-  - ../../credentials/base
-  - ../../credentials/aws
 
 generatorOptions:
   disableNameSuffixHash: true
@@ -17,6 +13,8 @@ secretGenerator:
       - install-config.yaml
 
 resources:
+  - ../../credentials/base
+  - ../../credentials/aws
   - namespace.yaml
   - managedcluster.yaml
   - managedclusterset.yaml
